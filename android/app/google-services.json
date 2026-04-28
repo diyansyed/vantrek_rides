@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "639036879009",
+    "project_id": "vantrek-rides",
+    "storage_bucket": "vantrek-rides.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639036879009:android:9b72216a4d911f9a41c0e0",
+        "android_client_info": {
+          "package_name": "com.vanrek.vantrek_rides"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3xtakqka9t5QfeAwgHhxpf7gGeOnq48s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
