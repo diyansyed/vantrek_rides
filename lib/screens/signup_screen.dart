@@ -18,7 +18,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  bool _isDriver = false;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
@@ -40,34 +39,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   Future<void> _handleSignUp() async {
     if (_formKey.currentState!.validate()) {
-      final userType = _isDriver ? UserType.driver : UserType.user;
-
+      // Always sign up as user
       await ref.read(authControllerProvider.notifier).signUpWithEmailPassword(
         email: _emailController.text,
         password: _passwordController.text,
-        userType: userType,
+        userType: UserType.user,
         displayName: _nameController.text.trim().isEmpty
             ? null
             : _nameController.text.trim(),
       );
     }
-  }
-
-  Future<void> _handleGoogleSignUp() async {
-    final userType = _isDriver ? UserType.driver : UserType.user;
-
-    await ref.read(authControllerProvider.notifier).signInWithGoogle(
-      userType: userType,
-    );
-  }
-
-  void _handleAppleSignUp() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Apple Sign-In coming soon'),
-        backgroundColor: Colors.orange,
-      ),
-    );
   }
 
   void _navigateToSignIn() {
@@ -161,22 +142,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
                   // Confirm Password Field
                   _buildConfirmPasswordField(),
-                  const SizedBox(height: 24),
-
-                  // User/Driver Toggle
-                  _buildUserTypeToggle(),
                   const SizedBox(height: 32),
 
                   // Sign Up Button
                   _buildSignUpButton(authState.isLoading),
-                  const SizedBox(height: 24),
-
-                  // OR Divider
-                  _buildDivider(),
-                  const SizedBox(height: 24),
-
-                  // Social Sign Up Buttons
-                  _buildSocialSignUpButtons(authState.isLoading),
                   const SizedBox(height: 24),
 
                   // Already have account
@@ -430,78 +399,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     );
   }
 
-  Widget _buildUserTypeToggle() {
-    return Column(
-      children: [
-        Text(
-          'I want to sign up as a',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildToggleButton(
-                label: 'User',
-                isSelected: !_isDriver,
-                onTap: () {
-                  setState(() {
-                    _isDriver = false;
-                  });
-                },
-              ),
-              _buildToggleButton(
-                label: 'Driver',
-                isSelected: _isDriver,
-                onTap: () {
-                  setState(() {
-                    _isDriver = true;
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildToggleButton({
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2196F3) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black54,
-            fontSize: 16,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildSignUpButton(bool isLoading) {
     return SizedBox(
       width: double.infinity,
@@ -533,95 +430,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDivider() {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 1,
-            color: Colors.grey[300],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'OR',
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: 1,
-            color: Colors.grey[300],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialSignUpButtons(bool isLoading) {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildSocialButton(
-            label: 'Continue with Google',
-            icon: Icons.g_mobiledata,
-            onTap: isLoading ? null : _handleGoogleSignUp,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildSocialButton(
-            label: 'Continue with',
-            icon: Icons.apple,
-            onTap: isLoading ? null : _handleAppleSignUp,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialButton({
-    required String label,
-    required IconData icon,
-    required VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[300]!),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: onTap == null ? Colors.grey : Colors.black87,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              icon,
-              size: 24,
-              color: onTap == null ? Colors.grey : Colors.black87,
-            ),
-          ],
         ),
       ),
     );

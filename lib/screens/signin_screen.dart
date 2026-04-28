@@ -16,8 +16,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  bool _isDriver = false;
   bool _isPasswordVisible = false;
 
   @override
@@ -37,31 +35,13 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      final userType = _isDriver ? UserType.driver : UserType.user;
-
+      // Always login as user
       await ref.read(authControllerProvider.notifier).signInWithEmailPassword(
         email: _emailController.text,
         password: _passwordController.text,
-        userType: userType,
+        userType: UserType.user,
       );
     }
-  }
-
-  Future<void> _handleGoogleSignIn() async {
-    final userType = _isDriver ? UserType.driver : UserType.user;
-
-    await ref.read(authControllerProvider.notifier).signInWithGoogle(
-      userType: userType,
-    );
-  }
-
-  void _handleAppleSignIn() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Apple Sign-In coming soon'),
-        backgroundColor: Colors.orange,
-      ),
-    );
   }
 
   void _navigateToSignUp() {
@@ -78,6 +58,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           SnackBar(
             content: Text(next.error!),
             backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }
@@ -87,6 +68,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           SnackBar(
             content: Text(next.successMessage!),
             backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
           ),
         );
 
@@ -103,41 +85,50 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Logo
                   _buildLogo(),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 40),
 
+                  // Sign-In Title
                   const Text(
-                    'Sign-In',
+                    'Welcome Back',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 8),
 
+                  // Subtitle
+                  Text(
+                    'Sign in to continue',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Email Field
                   _buildEmailField(),
                   const SizedBox(height: 16),
 
+                  // Password Field
                   _buildPasswordField(),
-                  const SizedBox(height: 24),
-
-                  _buildUserTypeToggle(),
                   const SizedBox(height: 32),
 
+                  // Login Button
                   _buildLoginButton(authState.isLoading),
-                  const SizedBox(height: 32),
-
-                  _buildDivider(),
-                  const SizedBox(height: 32),
-
-                  _buildSocialLoginButtons(authState.isLoading),
                   const SizedBox(height: 24),
 
+                  // Sign Up Link
                   _buildSignUpLink(),
                 ],
               ),
@@ -148,19 +139,58 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     );
   }
 
-  // ================= UI COMPONENTS =================
-
   Widget _buildLogo() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Icon(Icons.directions_car, size: 40),
-        SizedBox(width: 12),
-        Text(
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[400]!, Colors.blue[600]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                left: 8,
+                top: 12,
+                child: Container(
+                  width: 8,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: Colors.blue[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  width: 12,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        const Text(
           'VANTREK',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
+            color: Colors.black87,
+            letterSpacing: 1.2,
           ),
         ),
       ],
@@ -168,64 +198,96 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   }
 
   Widget _buildEmailField() {
-    return TextFormField(
-      controller: _emailController,
-      decoration: const InputDecoration(
-        hintText: 'Email',
-        border: OutlineInputBorder(),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Enter email';
-        if (!value.contains('@')) return 'Invalid email';
-        return null;
-      },
+      child: TextFormField(
+        controller: _emailController,
+        keyboardType: TextInputType.emailAddress,
+        style: const TextStyle(fontSize: 16),
+        decoration: const InputDecoration(
+          hintText: 'Email',
+          hintStyle: TextStyle(
+            color: Colors.grey,
+            fontSize: 16,
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter your email';
+          }
+          if (!value.contains('@')) {
+            return 'Please enter a valid email';
+          }
+          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+            return 'Please enter a valid email format';
+          }
+          return null;
+        },
+      ),
     );
   }
 
   Widget _buildPasswordField() {
-    return TextFormField(
-      controller: _passwordController,
-      obscureText: !_isPasswordVisible,
-      decoration: InputDecoration(
-        hintText: 'Password',
-        border: const OutlineInputBorder(),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isPasswordVisible
-                ? Icons.visibility
-                : Icons.visibility_off,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
-          onPressed: () {
-            setState(() {
-              _isPasswordVisible = !_isPasswordVisible;
-            });
-          },
-        ),
+        ],
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Enter password';
-        if (value.length < 6) return 'Min 6 characters';
-        return null;
-      },
-    );
-  }
-
-  Widget _buildUserTypeToggle() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ChoiceChip(
-          label: const Text('User'),
-          selected: !_isDriver,
-          onSelected: (_) => setState(() => _isDriver = false),
+      child: TextFormField(
+        controller: _passwordController,
+        obscureText: !_isPasswordVisible,
+        style: const TextStyle(fontSize: 16),
+        decoration: InputDecoration(
+          hintText: 'Password',
+          hintStyle: const TextStyle(
+            color: Colors.grey,
+            fontSize: 16,
+          ),
+          border: InputBorder.none,
+          contentPadding:
+          const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          suffixIcon: IconButton(
+            icon: Icon(
+              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              color: Colors.grey,
+              size: 20,
+            ),
+            onPressed: () {
+              setState(() {
+                _isPasswordVisible = !_isPasswordVisible;
+              });
+            },
+          ),
         ),
-        const SizedBox(width: 12),
-        ChoiceChip(
-          label: const Text('Driver'),
-          selected: _isDriver,
-          onSelected: (_) => setState(() => _isDriver = true),
-        ),
-      ],
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter your password';
+          }
+          if (value.length < 6) {
+            return 'Password must be at least 6 characters';
+          }
+          return null;
+        },
+      ),
     );
   }
 
@@ -234,88 +296,32 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: isLoading ? null : _handleLogin,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF2196F3),
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
+          disabledBackgroundColor: Colors.grey[300],
+        ),
         child: isLoading
             ? const SizedBox(
           height: 20,
           width: 20,
-          child: CircularProgressIndicator(strokeWidth: 2),
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
         )
-            : const Text('Log In'),
-      ),
-    );
-  }
-
-  Widget _buildDivider() {
-    return Row(
-      children: [
-        Expanded(child: Divider()),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Text('OR'),
-        ),
-        Expanded(child: Divider()),
-      ],
-    );
-  }
-
-  // 🔥 FIXED OVERFLOW HERE
-  Widget _buildSocialLoginButtons(bool isLoading) {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildSocialButton(
-            label: 'Continue with Google',
-            icon: Icons.g_mobiledata,
-            onTap: isLoading ? null : _handleGoogleSignIn,
+            : const Text(
+          'Sign In',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildSocialButton(
-            label: 'Continue with Apple',
-            icon: Icons.apple,
-            onTap: isLoading ? null : _handleAppleSignIn,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialButton({
-    required String label,
-    required IconData icon,
-    required VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade300),
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: onTap == null ? Colors.grey : Colors.black,
-                ),
-              ),
-            ),
-            const SizedBox(width: 6),
-            Icon(
-              icon,
-              size: 22,
-              color: onTap == null ? Colors.grey : Colors.black,
-            ),
-          ],
         ),
       ),
     );
@@ -325,14 +331,21 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Don't have an account? "),
+        Text(
+          "Don't have an account? ",
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 14,
+          ),
+        ),
         GestureDetector(
           onTap: _navigateToSignUp,
           child: const Text(
             'Sign Up',
             style: TextStyle(
-              color: Colors.blue,
-              fontWeight: FontWeight.bold,
+              color: Color(0xFF2196F3),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
