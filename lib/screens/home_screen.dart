@@ -27,6 +27,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedIndex = 0;
   StreamSubscription? _driverProfileSubscription;
+  String _searchQuery = '';  // NEW: Track search query
+  final TextEditingController _searchController = TextEditingController();  // NEW: Search controller
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void dispose() {
     _driverProfileSubscription?.cancel();
+    _searchController.dispose();  // NEW: Dispose controller
     super.dispose();
   }
 
@@ -157,109 +160,175 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 24),
 
             // Main Action Cards
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildMainCard(
-                      title: 'Find a Driver',
-                      subtitle: 'Search Schools',
-                      icon: Icons.directions_car,
-                      color: const Color(0xFF2196F3),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SearchInstitutionScreen(),
-                          ),
-                        );
-                      },
+            if (_shouldShow(['find', 'driver', 'search', 'school']))
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _buildMainCard(
+                        title: 'Find a Driver',
+                        subtitle: 'Search Schools',
+                        icon: Icons.directions_car,
+                        color: const Color(0xFF2196F3),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SearchInstitutionScreen(),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _buildMainCard(
-                      title: 'Live Tracking',
-                      subtitle: 'Track Your Drivers',
-                      icon: Icons.my_location,
-                      color: Colors.white,
-                      textColor: const Color(0xFF2196F3),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const UserSubscribedDriversScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                    const SizedBox(width: 16),
+                    if (_shouldShow(['live', 'track', 'location', 'gps']))
+                      Expanded(
+                        child: _buildMainCard(
+                          title: 'Live Tracking',
+                          subtitle: 'Track Your Drivers',
+                          icon: Icons.my_location,
+                          color: Colors.white,
+                          textColor: const Color(0xFF2196F3),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const UserSubscribedDriversScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
+
+            if (_shouldShow(['find', 'driver', 'search', 'school']) &&
+                !_shouldShow(['live', 'track', 'location', 'gps']) &&
+                _searchQuery.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: _buildMainCard(
+                  title: 'Find a Driver',
+                  subtitle: 'Search Schools',
+                  icon: Icons.directions_car,
+                  color: const Color(0xFF2196F3),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SearchInstitutionScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+            if (!_shouldShow(['find', 'driver', 'search', 'school']) &&
+                _shouldShow(['live', 'track', 'location', 'gps']) &&
+                _searchQuery.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: _buildMainCard(
+                  title: 'Live Tracking',
+                  subtitle: 'Track Your Drivers',
+                  icon: Icons.my_location,
+                  color: Colors.white,
+                  textColor: const Color(0xFF2196F3),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const UserSubscribedDriversScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+            if (_shouldShow(['find', 'driver', 'search', 'school']) ||
+                _shouldShow(['live', 'track', 'location', 'gps']))
+              const SizedBox(height: 20),
 
             // Secondary Action Cards
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildSecondaryCard(
-                      title: 'Messages',
-                      subtitle: 'Chat with Drivers',
-                      icon: Icons.chat_bubble,
-                      color: const Color(0xFF2196F3),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const ChatListScreen(isDriver: false),
+            if (_shouldShow(['message', 'chat', 'driver']) ||
+                _shouldShow(['rate', 'feedback', 'review', 'star']))
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SizedBox(
+                  height: 160,
+                  child: Row(
+                    children: [
+                      if (_shouldShow(['message', 'chat', 'driver']))
+                        Expanded(
+                          child: _buildSecondaryCard(
+                            title: 'Messages',
+                            subtitle: 'Chat with Drivers',
+                            icon: Icons.chat_bubble,
+                            color: const Color(0xFF2196F3),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const ChatListScreen(isDriver: false),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _buildSecondaryCard(
-                      title: 'Rate Driver',
-                      subtitle: 'Give feedback',
-                      icon: Icons.star_rate,
-                      color: Colors.amber[700]!,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SelectDriverToRateScreen(),
+                        ),
+                      if (_shouldShow(['message', 'chat', 'driver']) &&
+                          _shouldShow(['rate', 'feedback', 'review', 'star']))
+                        const SizedBox(width: 16),
+                      if (_shouldShow(['rate', 'feedback', 'review', 'star']))
+                        Expanded(
+                          child: _buildSecondaryCard(
+                            title: 'Rate Driver',
+                            subtitle: 'Give feedback',
+                            icon: Icons.star_rate,
+                            color: Colors.amber[700]!,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const SelectDriverToRateScreen(),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-            const SizedBox(height: 32),
 
-            // Recent Rides Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Recent Rides',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+            // Show "No results" message if search has no matches
+            if (_searchQuery.isNotEmpty &&
+                !_shouldShow(['find', 'driver', 'search', 'school']) &&
+                !_shouldShow(['live', 'track', 'location', 'gps']) &&
+                !_shouldShow(['message', 'chat']) &&
+                !_shouldShow(['rate', 'feedback', 'review', 'star']))
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  children: [
+                    Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
+                    const SizedBox(height: 16),
+                    Text(
+                      'No results found for "$_searchQuery"',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildRecentRideCard(),
-                  const SizedBox(height: 12),
-                  _buildRecentRideCard(),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      'Try searching for: Find Driver, Live Tracking, Messages, or Rate Driver',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+
             const SizedBox(height: 100),
           ],
         ),
@@ -281,9 +350,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  // NEW: Helper method to determine if a widget should be shown based on search
+  bool _shouldShow(List<String> keywords) {
+    if (_searchQuery.isEmpty) return true;
+    return keywords.any((keyword) => keyword.contains(_searchQuery) || _searchQuery.contains(keyword));
+  }
+
   Widget _buildSearchBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -299,20 +374,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           const Icon(Icons.search, color: Colors.grey, size: 22),
           const SizedBox(width: 12),
-          const Expanded(
-            child: Text(
-              'Find Verified Drivers',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 15,
+          Expanded(
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                hintText: 'Search features...',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 15,
+                ),
+                border: InputBorder.none,
               ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value.toLowerCase();
+                });
+              },
             ),
           ),
-          CircleAvatar(
-            radius: 16,
-            backgroundColor: Colors.green[100],
-            child: Icon(Icons.location_on, size: 18, color: Colors.green[700]),
-          ),
+          if (_searchQuery.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.clear, color: Colors.grey, size: 20),
+              onPressed: () {
+                setState(() {
+                  _searchQuery = '';
+                  _searchController.clear();
+                });
+              },
+            ),
+          if (_searchQuery.isEmpty)
+            CircleAvatar(
+              radius: 16,
+              backgroundColor: Colors.green[100],
+              child: Icon(Icons.location_on, size: 18, color: Colors.green[700]),
+            ),
         ],
       ),
     );
@@ -405,7 +500,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -418,21 +513,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: color.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: color, size: 24),
+              child: Icon(icon, color: color, size: 28),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
             Text(
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 15,
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,
               ),
@@ -442,66 +538,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               subtitle,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 12,
                 color: Colors.grey[600],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildRecentRideCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.blue[50],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(Icons.history, color: Colors.blue[600], size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'No rides yet',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Your recent rides will appear here',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
-        ],
       ),
     );
   }
