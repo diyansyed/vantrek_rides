@@ -513,7 +513,7 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Go to Dashboard'),
+                    child: const Text('Go to Dashboard',style: TextStyle(color: Colors.white),),
                   ),
                 ),
               ],

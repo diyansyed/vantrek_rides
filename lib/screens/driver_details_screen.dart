@@ -368,7 +368,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                       icon: const Icon(Icons.chat, size: 20),
                       label: const Text(
                         'Chat with Driver',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),
                       ),
                     ),
                   ),
@@ -404,10 +404,10 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      icon: const Icon(Icons.my_location, size: 20),
+                      icon: const Icon(Icons.my_location, size: 20,color: Colors.white,),
                       label: const Text(
                         'Live Track This Driver',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),
                       ),
                     ),
                   ),

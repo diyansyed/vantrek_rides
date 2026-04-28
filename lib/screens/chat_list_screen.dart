@@ -46,7 +46,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               Icons.add_circle_outline,
               color: Color(0xFF2196F3),
             ),
-            tooltip: 'Start New Chat',
+            tooltip: 'Start New Chat' ,
             onPressed: () async {
               final result = await Navigator.push(
                 context,
@@ -161,7 +161,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     radius: 28,
                     backgroundColor: const Color(0xFF2196F3).withOpacity(0.1),
                     child: Text(
-                      otherPersonName[0].toUpperCase(),
+                      otherPersonName.isNotEmpty ? otherPersonName[0].toUpperCase() : 'U',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -311,6 +311,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2196F3),
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
                   vertical: 16,
@@ -368,6 +369,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2196F3),
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,

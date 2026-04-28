@@ -486,7 +486,7 @@ class _DriverInstitutionSearchScreenState
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('Register'),
+            child: const Text('Register',style: TextStyle(color: Colors.white),),
           ),
         ],
       ),

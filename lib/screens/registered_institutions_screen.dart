@@ -163,9 +163,11 @@ class _RegisteredInstitutionsScreenState
                 ),
               ),
               icon: const Icon(Icons.add),
-              label: const Text(
-                'Add Institution',
-                style: TextStyle(fontSize: 16),
+              label: Center(
+                child: const Text(
+                  'Add Institution',
+                  style: TextStyle(fontSize: 16,color: Colors.white),
+                ),
               ),
             ),
           ],

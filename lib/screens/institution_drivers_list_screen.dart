@@ -52,7 +52,7 @@ class _InstitutionDriversListScreenState
     _calculateDistanceAndPrice();
     _loadDrivers();
     _loadSentRequests();
-    _loadSubscriptions(); // NEW: Check existing subscriptions
+    _loadSubscriptions();
   }
 
   void _calculateDistanceAndPrice() {
@@ -111,15 +111,10 @@ class _InstitutionDriversListScreenState
     }
   }
 
-  // NEW: Load existing subscriptions
   Future<void> _loadSubscriptions() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return;
-
-      print('═══════════════════════════════════════');
-      print('CHECKING EXISTING SUBSCRIPTIONS');
-      print('User ID: ${user.uid}');
 
       final snapshot = await _firestore
           .collection('users')
@@ -131,10 +126,6 @@ class _InstitutionDriversListScreenState
       final subscribedIds = snapshot.docs
           .map((doc) => doc.data()['driverId'] as String)
           .toSet();
-
-      print('Already subscribed to ${subscribedIds.length} drivers');
-      print('Driver IDs: $subscribedIds');
-      print('═══════════════════════════════════════');
 
       setState(() {
         _subscribedDriverIds = subscribedIds;
@@ -517,7 +508,6 @@ class _InstitutionDriversListScreenState
                           color: Colors.black87,
                         ),
                       ),
-                      // NEW: Show subscription status
                       if (isSubscribed) ...[
                         const SizedBox(height: 4),
                         Container(
@@ -669,73 +659,53 @@ class _InstitutionDriversListScreenState
               ),
             ],
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () => _callDriver(driver.phoneNumber),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF2196F3),
-                      side: const BorderSide(color: Color(0xFF2196F3)),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    icon: const Icon(Icons.phone, size: 18),
-                    label: const Text('Call'),
+            // Single full-width button for subscription
+            SizedBox(
+              width: double.infinity,
+              child: isSubscribed
+                  ? ElevatedButton.icon(
+                onPressed: null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green[100],
+                  foregroundColor: Colors.green[700],
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                  elevation: 0,
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: isSubscribed
-                      ? ElevatedButton.icon(
-                    onPressed: null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[100],
-                      foregroundColor: Colors.green[700],
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                    ),
-                    icon: const Icon(Icons.check_circle, size: 18),
-                    label: const Text('Subscribed'),
-                  )
-                      : hasRequestPending
-                      ? ElevatedButton.icon(
-                    onPressed: null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[300],
-                      foregroundColor: Colors.grey[600],
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                    ),
-                    icon: const Icon(Icons.schedule, size: 18),
-                    label: const Text('Request Sent'),
-                  )
-                      : ElevatedButton.icon(
-                    onPressed: () => _sendRideRequest(driver),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2196F3),
-                      foregroundColor: Colors.white,
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                    ),
-                    icon: const Icon(Icons.send, size: 18),
-                    label: const Text('Send Request'),
+                icon: const Icon(Icons.check_circle, size: 18),
+                label: const Text('Subscribed'),
+              )
+                  : hasRequestPending
+                  ? ElevatedButton.icon(
+                onPressed: null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[300],
+                  foregroundColor: Colors.grey[600],
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                  elevation: 0,
                 ),
-              ],
+                icon: const Icon(Icons.schedule, size: 18),
+                label: const Text('Request Sent'),
+              )
+                  : ElevatedButton.icon(
+                onPressed: () => _sendRideRequest(driver),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2196F3),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                icon: const Icon(Icons.send, size: 18),
+                label: const Text('Send Request'),
+              ),
             ),
           ],
         ),
@@ -768,20 +738,6 @@ class _InstitutionDriversListScreenState
     if (hour < 12) return '$hour:$minute AM';
     if (hour == 12) return '12:$minute PM';
     return '${hour - 12}:$minute PM';
-  }
-
-  void _callDriver(String phoneNumber) {
-    if (phoneNumber.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Phone number not available'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      return;
-    }
-    final uri = Uri(scheme: 'tel', path: phoneNumber);
-    launchUrl(uri);
   }
 
   void _sendRideRequest(InstitutionDriver driver) async {
@@ -882,6 +838,7 @@ class _InstitutionDriversListScreenState
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2196F3),
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

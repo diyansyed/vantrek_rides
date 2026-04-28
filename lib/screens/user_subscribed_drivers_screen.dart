@@ -39,10 +39,6 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
 
     if (confirm != true) return;
 
-    print('═══════════════════════════════════════');
-    print('UNSUBSCRIBING');
-    print('Subscription ID: $subscriptionId');
-
     try {
       // Get subscription data to find userId and driverId
       final subDoc = await _firestore.collection('subscriptions').doc(subscriptionId).get();
@@ -55,16 +51,12 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
       final userId = subData['userId'];
       final driverId = subData['driverId'];
 
-      print('User ID: $userId');
-      print('Driver ID: $driverId');
-
       // Delete from all 3 locations using batch
       final batch = _firestore.batch();
 
       // 1. Main subscriptions collection
       final subRef = _firestore.collection('subscriptions').doc(subscriptionId);
       batch.delete(subRef);
-      print('✅ Deleting from: subscriptions/$subscriptionId');
 
       // 2. User's driverSubscriptions
       final userSubRef = _firestore
@@ -73,7 +65,6 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
           .collection('driverSubscriptions')
           .doc(subscriptionId);
       batch.delete(userSubRef);
-      print('✅ Deleting from: users/$userId/driverSubscriptions/$subscriptionId');
 
       // 3. Driver's subscribers
       final driverSubRef = _firestore
@@ -82,19 +73,14 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
           .collection('subscribers')
           .doc(subscriptionId);
       batch.delete(driverSubRef);
-      print('✅ Deleting from: drivers/$driverId/subscribers/$subscriptionId');
 
       // 4. Decrement subscriber count
       final driverRef = _firestore.collection('drivers').doc(driverId);
       batch.set(driverRef, {
         'subscriberCount': FieldValue.increment(-1),
       }, SetOptions(merge: true));
-      print('✅ Decrementing subscriber count');
 
       await batch.commit();
-
-      print('✅ UNSUBSCRIBE SUCCESSFUL - Deleted from all 3 locations!');
-      print('═══════════════════════════════════════');
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -105,9 +91,6 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
         );
       }
     } catch (e) {
-      print('❌ UNSUBSCRIBE ERROR: $e');
-      print('═══════════════════════════════════════');
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -202,16 +185,7 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
 
   Widget _buildDriverCard(String subscriptionId, Map<String, dynamic> data) {
     final driverId = data['driverId'] ?? '';
-
-    // FIX: Changed from 'monthlyPrice' to 'monthlyFee'
     final monthlyPrice = data['monthlyFee'] ?? 0;
-
-    print('═══════════════════════════════════════');
-    print('DISPLAYING DRIVER CARD');
-    print('Subscription ID: $subscriptionId');
-    print('Driver ID: $driverId');
-    print('Monthly Fee from data: $monthlyPrice');
-    print('═══════════════════════════════════════');
 
     return FutureBuilder<DocumentSnapshot>(
       future: _firestore.collection('drivers').doc(driverId).get(),
@@ -271,7 +245,7 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
                         radius: 28,
                         backgroundColor: const Color(0xFF2196F3).withOpacity(0.1),
                         child: Text(
-                          driverName[0].toUpperCase(),
+                          driverName.isNotEmpty ? driverName[0].toUpperCase() : 'D',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -385,6 +359,7 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF2196F3),
+                            foregroundColor: Colors.white,  // WHITE TEXT
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),

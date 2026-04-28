@@ -12,7 +12,7 @@ import 'registered_institutions_screen.dart';
 import 'driver_ride_requests_screen.dart';
 import 'driver_subscribers_screen.dart';
 import 'chat_list_screen.dart';
-import 'driver_profile_screen.dart';  // ← NEW IMPORT
+import 'driver_profile_screen.dart';
 
 class DriverDashboardScreen extends ConsumerStatefulWidget {
   const DriverDashboardScreen({super.key});
@@ -169,18 +169,6 @@ class _DriverDashboardScreenState
               ),
 
               const SizedBox(height: 24),
-
-              // Recent Rides Section
-              const Text(
-                'Recent Rides',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 12),
-              _buildRecentRidesCard(),
             ],
           ),
         ),
@@ -466,7 +454,7 @@ class _DriverDashboardScreenState
                     Text(
                       'New Ride Requests',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -748,53 +736,6 @@ class _DriverDashboardScreenState
     );
   }
 
-  Widget _buildRecentRidesCard() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.blue[50],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(Icons.local_taxi, color: Colors.blue[600], size: 28),
-          ),
-          const SizedBox(width: 16),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'No rides yet',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'Your recent rides will appear here',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
-        ],
-      ),
-    );
-  }
-
   void _showDriverMenu(BuildContext context) {
     final driverProfile = ref.read(driverProfileProvider);
 
@@ -937,7 +878,6 @@ class _DriverDashboardScreenState
                 label: 'Profile',
                 isActive: false,
                 onTap: () {
-                  // ← UPDATED TO OPEN PROFILE SCREEN!
                   Navigator.push(
                     context,
                     MaterialPageRoute(
