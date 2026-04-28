@@ -438,8 +438,8 @@ class _PickupTimesDialogState extends State<PickupTimesDialog> {
                         ),
                       ),
                       child: Text(
-                        isValid ? 'Save Times' : 'Add times first',
-                        style: const TextStyle(fontSize: 14),
+                        isValid ? 'Save Times'  : 'Add times first',
+                        style: const TextStyle(fontSize: 14, color: Colors.white),
                       ),
                     ),
                   ),

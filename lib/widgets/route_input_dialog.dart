@@ -318,7 +318,7 @@ class _RouteInputDialogState extends State<RouteInputDialog> {
                     ),
                     child: Text(
                       _route.length >= 2 ? 'Save Route' : 'Min 2 stops',
-                      style: const TextStyle(fontSize: 13),
+                      style: const TextStyle(fontSize: 13,color: Colors.white),
                     ),
                   ),
                 ),
