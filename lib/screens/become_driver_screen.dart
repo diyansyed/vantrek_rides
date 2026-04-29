@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/driver_profile_model.dart';
-import '../providers/driver_providers.dart';
-import 'driver_dashboard_screen.dart';
 
 class BecomeDriverScreen extends ConsumerStatefulWidget {
   const BecomeDriverScreen({super.key});
@@ -19,15 +16,21 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
   final _phoneController = TextEditingController();
   final _cnicController = TextEditingController();
   final _vehicleNumberController = TextEditingController();
+  final _vehicleModelController = TextEditingController();
+  final _vehicleColorController = TextEditingController();
   final _licenseNumberController = TextEditingController();
 
-  VehicleType _selectedVehicleType = VehicleType.car;
+  String _selectedVehicleType = 'Car';
   bool _isLoading = false;
+  bool _hasSubmitted = false;
+
+  final List<String> _vehicleTypes = ['Car', 'Van', 'Bike', 'Rickshaw', 'SUV'];
 
   @override
   void initState() {
     super.initState();
     _loadUserInfo();
+    _checkExistingApplication();
   }
 
   @override
@@ -36,6 +39,8 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
     _phoneController.dispose();
     _cnicController.dispose();
     _vehicleNumberController.dispose();
+    _vehicleModelController.dispose();
+    _vehicleColorController.dispose();
     _licenseNumberController.dispose();
     super.dispose();
   }
@@ -50,8 +55,32 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
     }
   }
 
+  Future<void> _checkExistingApplication() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      final existingApp = await FirebaseFirestore.instance
+          .collection('driver_applications')
+          .where('userId', isEqualTo: user.uid)
+          .where('status', isEqualTo: 'pending')
+          .limit(1)
+          .get();
+
+      if (existingApp.docs.isNotEmpty && mounted) {
+        setState(() => _hasSubmitted = true);
+      }
+    } catch (e) {
+      print('Error checking application: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_hasSubmitted) {
+      return _buildPendingScreen();
+    }
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -92,7 +121,6 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Name
                 _buildTextField(
                   controller: _nameController,
                   label: 'Full Name',
@@ -107,26 +135,21 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Phone Number
                 _buildTextField(
                   controller: _phoneController,
                   label: 'Phone Number',
-                  hint: '03XX XXXXXXX',
+                  hint: '+92-XXX-XXXXXXX',
                   icon: Icons.phone,
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your phone number';
                     }
-                    if (value.length < 11) {
-                      return 'Enter valid phone number';
-                    }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
 
-                // CNIC
                 _buildTextField(
                   controller: _cnicController,
                   label: 'CNIC Number',
@@ -137,12 +160,24 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your CNIC';
                     }
-                    if (value.length < 13) {
-                      return 'Enter valid CNIC';
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                _buildTextField(
+                  controller: _licenseNumberController,
+                  label: 'Driving License Number',
+                  hint: 'Your license number',
+                  icon: Icons.badge,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter license number';
                     }
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 24),
 
                 // Vehicle Information Section
@@ -156,11 +191,23 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Vehicle Type Dropdown
                 _buildVehicleTypeDropdown(),
                 const SizedBox(height: 16),
 
-                // Vehicle Number
+                _buildTextField(
+                  controller: _vehicleModelController,
+                  label: 'Vehicle Model',
+                  hint: 'e.g., Toyota Corolla, Honda Civic',
+                  icon: Icons.car_rental,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter vehicle model';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
                 _buildTextField(
                   controller: _vehicleNumberController,
                   label: 'Vehicle Registration Number',
@@ -175,19 +222,19 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // License Number
                 _buildTextField(
-                  controller: _licenseNumberController,
-                  label: 'Driving License Number',
-                  hint: 'Your license number',
-                  icon: Icons.badge,
+                  controller: _vehicleColorController,
+                  label: 'Vehicle Color',
+                  hint: 'e.g., White, Black, Silver',
+                  icon: Icons.palette,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter license number';
+                      return 'Please enter vehicle color';
                     }
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 32),
 
                 // Submit Button
@@ -230,7 +277,7 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Join our network and connect with students',
+          'Submit your application and our team will review it',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,
@@ -255,17 +302,17 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
         ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: DropdownButtonFormField<VehicleType>(
+      child: DropdownButtonFormField<String>(
         value: _selectedVehicleType,
         decoration: const InputDecoration(
           labelText: 'Vehicle Type',
           border: InputBorder.none,
           prefixIcon: Icon(Icons.directions_car, color: Color(0xFF2196F3)),
         ),
-        items: VehicleType.values.map((type) {
+        items: _vehicleTypes.map((type) {
           return DropdownMenuItem(
             value: type,
-            child: Text(_getVehicleTypeName(type)),
+            child: Text(type),
           );
         }).toList(),
         onChanged: (value) {
@@ -337,7 +384,7 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
           ),
         )
             : const Text(
-          'Register as Driver',
+          'Submit Application',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -350,7 +397,7 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
 
   Widget _buildTermsText() {
     return Text(
-      'By registering, you agree to our Terms of Service and Driver Agreement.',
+      'By submitting, you agree to our Terms of Service and Driver Agreement. Your application will be reviewed by our admin team.',
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 12,
@@ -359,27 +406,10 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
     );
   }
 
-  String _getVehicleTypeName(VehicleType type) {
-    switch (type) {
-      case VehicleType.car:
-        return 'Car';
-      case VehicleType.van:
-        return 'Van';
-      case VehicleType.bike:
-        return 'Bike';
-      case VehicleType.rickshaw:
-        return 'Rickshaw';
-      case VehicleType.suv:
-        return 'SUV';
-    }
-  }
-
   void _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -387,155 +417,176 @@ class _BecomeDriverScreenState extends ConsumerState<BecomeDriverScreen> {
         throw Exception('User not logged in');
       }
 
-      print('═══════════════════════════════════════');
-      print('CREATING DRIVER PROFILE');
-      print('User ID: ${user.uid}');
-      print('Name: ${_nameController.text.trim()}');
-      print('Phone: ${_phoneController.text.trim()}');
-
-      // Create driver profile
-      final driverProfile = DriverProfile(
-        driverId: user.uid,
-        vehicleType: _selectedVehicleType,
-        vehicleModel: _getVehicleTypeName(_selectedVehicleType),
-        vehicleNumber: _vehicleNumberController.text.trim(),
-        licenseNumber: _licenseNumberController.text.trim(),
-        serviceInstitutionId: '', // Will be set when registering at institution
-        serviceInstitutionName: '', // Will be set when registering at institution
-        registeredAt: DateTime.now(),
-        subscriptionStatus: SubscriptionStatus.active,
-        subscriptionStartDate: DateTime.now(),
-        subscriptionEndDate: DateTime.now().add(const Duration(days: 30)),
-      );
-
-      // CRITICAL: Save to Firestore with name and phoneNumber GUARANTEED
-      final driverData = {
-        ...driverProfile.toMap(),
-        'name': _nameController.text.trim(), // ← ALWAYS SAVED
-        'phoneNumber': _phoneController.text.trim(), // ← ALWAYS SAVED
+      // Submit driver application
+      final applicationData = {
+        'userId': user.uid,
+        'userName': _nameController.text.trim(),
+        'email': user.email ?? '',
+        'phone': _phoneController.text.trim(),
         'cnic': _cnicController.text.trim(),
-        'rating': 0.0,
-        'totalRides': 0,
-        'isOnline': false,
-        'subscriberCount': 0,
-        'createdAt': FieldValue.serverTimestamp(),
+        'licenseNumber': _licenseNumberController.text.trim(),
+        'vehicleType': _selectedVehicleType,
+        'vehicleModel': _vehicleModelController.text.trim(),
+        'vehicleNumber': _vehicleNumberController.text.trim(),
+        'vehicleColor': _vehicleColorController.text.trim(),
+        'status': 'pending',
+        'submittedAt': FieldValue.serverTimestamp(),
       };
 
       await FirebaseFirestore.instance
-          .collection('drivers')
-          .doc(user.uid)
-          .set(driverData);
-
-      print('✅ Driver document created with name and phone');
-
-      // Also update user document with driver info
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .update({
-        'isDriver': true,
-        'name': _nameController.text.trim(),
-        'phoneNumber': _phoneController.text.trim(),
-        'cnic': _cnicController.text.trim(),
-      });
-
-      print('✅ User document updated');
-      print('═══════════════════════════════════════');
-
-      // Update providers
-      ref.read(driverProfileProvider.notifier).state = driverProfile;
-      ref.read(isDriverProvider.notifier).state = true;
-      ref.read(appModeProvider.notifier).state = AppMode.driver;
+          .collection('driver_applications')
+          .add(applicationData);
 
       setState(() {
         _isLoading = false;
+        _hasSubmitted = true;
       });
 
       if (mounted) {
-        // Show success dialog
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.green[50],
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.check_circle,
-                    color: Colors.green[600],
-                    size: 60,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Welcome Aboard!',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'You are now registered as a driver!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close dialog
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DriverDashboardScreen(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2196F3),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('Go to Dashboard',style: TextStyle(color: Colors.white),),
-                  ),
-                ),
-              ],
-            ),
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Application submitted successfully!'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-
-      print('❌ Error creating driver: $e');
+      setState(() => _isLoading = false);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error: ${e.toString()}'),
             backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }
     }
+  }
+
+  Widget _buildPendingScreen() {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Application Status',
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.orange[50],
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.pending_actions,
+                  size: 80,
+                  color: Colors.orange[700],
+                ),
+              ),
+              const SizedBox(height: 32),
+              const Text(
+                'Application Pending',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Your driver application has been submitted and is currently under review.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[700],
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 32),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.blue[200]!),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.blue[700]),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'What happens next?',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue[900],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      '• Our admin team will review your application\n'
+                          '• You will be notified once approved\n'
+                          '• This usually takes 1-2 business days',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.blue[800],
+                        height: 1.6,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2196F3),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  'Back to Home',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

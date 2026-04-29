@@ -606,11 +606,56 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  void _showDrawer(BuildContext context) {
+  void _showDrawer(BuildContext context) async {
     final authState = ref.read(authControllerProvider);
     final user = authState.user;
-    final isDriver = ref.read(isDriverProvider);
-    final appMode = ref.read(appModeProvider);
+
+    // Get current Firebase user
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+    if (firebaseUser == null) return;
+
+    // REAL-TIME CHECK: Check both collections every time drawer opens
+    bool isApprovedDriver = false;
+    bool hasPendingApplication = false;
+
+    try {
+      // Check if user is in drivers collection (approved)
+      final driverDoc = await FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(firebaseUser.uid)
+          .get();
+
+      isApprovedDriver = driverDoc.exists;
+
+      // If not approved, check for pending application
+      if (!isApprovedDriver) {
+        final applicationSnapshot = await FirebaseFirestore.instance
+            .collection('driver_applications')
+            .where('userId', isEqualTo: firebaseUser.uid)
+            .where('status', isEqualTo: 'pending')
+            .limit(1)
+            .get();
+
+        hasPendingApplication = applicationSnapshot.docs.isNotEmpty;
+      }
+
+      // Update provider state to match reality
+      if (isApprovedDriver && mounted) {
+        ref.read(isDriverProvider.notifier).state = true;
+        if (driverDoc.data() != null) {
+          final driverProfile = DriverProfile.fromMap(driverDoc.data()!);
+          ref.read(driverProfileProvider.notifier).state = driverProfile;
+        }
+      } else if (mounted) {
+        ref.read(isDriverProvider.notifier).state = false;
+        ref.read(driverProfileProvider.notifier).state = null;
+      }
+
+    } catch (e) {
+      print('Error checking driver status: $e');
+    }
+
+    if (!mounted) return;
 
     showModalBottomSheet(
       context: context,
@@ -646,22 +691,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const Divider(),
 
-            // Driver Mode Toggle
+            // Driver Mode Toggle - with three states
             ListTile(
-              leading: const Icon(Icons.local_taxi, color: Color(0xFF2196F3)),
+              leading: Icon(
+                Icons.local_taxi,
+                color: isApprovedDriver
+                    ? Colors.green
+                    : (hasPendingApplication ? Colors.orange : const Color(0xFF2196F3)),
+              ),
               title: const Text('Driver Mode'),
-              subtitle: Text(isDriver ? 'Registered' : 'Not registered'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              subtitle: Text(
+                isApprovedDriver
+                    ? 'Approved - Tap to view dashboard'
+                    : (hasPendingApplication
+                    ? 'Application pending approval'
+                    : 'Not registered - Tap to apply'),
+              ),
+              trailing: Icon(
+                isApprovedDriver
+                    ? Icons.check_circle
+                    : (hasPendingApplication ? Icons.pending : Icons.arrow_forward_ios),
+                size: 20,
+                color: isApprovedDriver
+                    ? Colors.green
+                    : (hasPendingApplication ? Colors.orange : null),
+              ),
               onTap: () {
                 Navigator.pop(context); // Close drawer
 
-                // Check local state only - no Firestore calls
-                if (isDriver) {
-                  // Already registered - go to dashboard
+                if (isApprovedDriver) {
+                  // Already approved - go to dashboard
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const DriverDashboardScreen(),
+                    ),
+                  );
+                } else if (hasPendingApplication) {
+                  // Application pending - show pending screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BecomeDriverScreen(),
                     ),
                   );
                 } else {
