@@ -10,7 +10,7 @@ class DriverLocationService {
   StreamSubscription<Position>? _positionStreamSubscription;
   Timer? _updateTimer;
 
-  /// Start sharing live location
+
   Future<void> startSharingLocation() async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('User not logged in');
@@ -33,7 +33,7 @@ class DriverLocationService {
       throw Exception('Location permissions are permanently denied');
     }
 
-    // Get initial position and update immediately
+
     try {
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
@@ -60,7 +60,7 @@ class DriverLocationService {
       },
     );
 
-    // Also update every 10 seconds even if not moving
+
     _updateTimer = Timer.periodic(const Duration(seconds: 10), (timer) async {
       try {
         final position = await Geolocator.getCurrentPosition(
@@ -75,19 +75,16 @@ class DriverLocationService {
     print('Started sharing location');
   }
 
-  /// Stop sharing live location
   Future<void> stopSharingLocation() async {
     final user = _auth.currentUser;
     if (user == null) return;
 
-    // Cancel subscriptions
     await _positionStreamSubscription?.cancel();
     _positionStreamSubscription = null;
 
     _updateTimer?.cancel();
     _updateTimer = null;
 
-    // Remove location from Firestore
     try {
       await _firestore.collection('drivers').doc(user.uid).update({
         'currentLocation': null,
@@ -100,7 +97,6 @@ class DriverLocationService {
     }
   }
 
-  /// Update location in Firestore
   Future<void> _updateLocationInFirestore(Position position) async {
     final user = _auth.currentUser;
     if (user == null) return;
@@ -120,7 +116,6 @@ class DriverLocationService {
     }
   }
 
-  /// Get current location once (without streaming)
   Future<Position?> getCurrentLocation() async {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -143,10 +138,8 @@ class DriverLocationService {
     }
   }
 
-  /// Check if currently sharing location
   bool get isSharingLocation => _positionStreamSubscription != null;
 
-  /// Clean up resources
   void dispose() {
     _positionStreamSubscription?.cancel();
     _updateTimer?.cancel();

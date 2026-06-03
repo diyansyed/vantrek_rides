@@ -15,7 +15,7 @@ class AppUser {
     required this.createdAt,
   });
 
-  // Convert to Map for Firestore
+
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
@@ -27,7 +27,7 @@ class AppUser {
     };
   }
 
-  // Create from Map (Firestore)
+
   factory AppUser.fromMap(Map<String, dynamic> map) {
     return AppUser(
       uid: map['uid'] ?? '',
@@ -42,7 +42,7 @@ class AppUser {
     );
   }
 
-  // Copy with method
+
   AppUser copyWith({
     String? uid,
     String? email,

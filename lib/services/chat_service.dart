@@ -5,12 +5,12 @@ class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Create or get existing chat between user and driver
+
   Future<String> createOrGetChat({
     required String userId,
     required String driverId,
   }) async {
-    // Create chat ID (always in same order for consistency)
+
     final chatId = 'user_${userId}_driver_$driverId';
 
     // Check if chat already exists
@@ -42,7 +42,7 @@ class ChatService {
     return chatId;
   }
 
-  // Alias for compatibility
+
   Future<String> getOrCreateChat({
     required String userId,
     required String driverId,
@@ -75,11 +75,10 @@ class ChatService {
       'isDriver': isDriver,
     });
 
-    // Update chat document
     await _firestore.collection('chats').doc(chatId).update({
       'lastMessage': messageText,
       'lastMessageTime': FieldValue.serverTimestamp(),
-      // Increment unread count for the other person
+
       if (isDriver) 'userUnreadCount': FieldValue.increment(1),
       if (!isDriver) 'driverUnreadCount': FieldValue.increment(1),
     });
@@ -96,7 +95,7 @@ class ChatService {
     });
   }
 
-  // Alias for compatibility
+
   Future<void> markMessagesAsRead({
     required String chatId,
     required bool isDriver,

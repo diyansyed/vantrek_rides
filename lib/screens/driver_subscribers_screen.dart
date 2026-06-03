@@ -70,7 +70,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
     }
   }
 
-  // NEW: Remove subscriber function - deletes from all 3 locations
   Future<void> _removeSubscriber(String subscriptionId, String userName) async {
     final confirm = await showDialog<bool>(
       context: context,
@@ -102,7 +101,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
       final currentUser = _auth.currentUser;
       if (currentUser == null) throw Exception('Driver not logged in');
 
-      // Get subscription data to find userId
       final subDoc = await _firestore
           .collection('drivers')
           .doc(currentUser.uid)
@@ -121,15 +119,12 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
       print('User ID: $userId');
       print('Driver ID: $driverId');
 
-      // Delete from all 3 locations using batch
       final batch = _firestore.batch();
 
-      // 1. Delete from main subscriptions collection
       final mainSubRef = _firestore.collection('subscriptions').doc(subscriptionId);
       batch.delete(mainSubRef);
       print('✅ Deleting from: subscriptions/$subscriptionId');
 
-      // 2. Delete from user's driverSubscriptions
       final userSubRef = _firestore
           .collection('users')
           .doc(userId)
@@ -138,7 +133,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
       batch.delete(userSubRef);
       print('✅ Deleting from: users/$userId/driverSubscriptions/$subscriptionId');
 
-      // 3. Delete from driver's subscribers
       final driverSubRef = _firestore
           .collection('drivers')
           .doc(driverId)
@@ -147,7 +141,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
       batch.delete(driverSubRef);
       print('✅ Deleting from: drivers/$driverId/subscribers/$subscriptionId');
 
-      // 4. Decrement driver's subscriber count
       final driverRef = _firestore.collection('drivers').doc(driverId);
       batch.set(driverRef, {
         'subscriberCount': FieldValue.increment(-1),
@@ -315,7 +308,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
     final userName = data['userName'] ?? 'User';
     final userPhone = data['userPhone'] ?? '';
 
-    // NEW: Get monthlyFee from subscription data
     final monthlyFee = data['monthlyFee'] ?? 0;
 
     return Card(
@@ -344,7 +336,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                // Info
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,7 +362,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
                     ],
                   ),
                 ),
-                // Price Column
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -394,7 +384,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
                 ),
               ],
             ),
-            // Action Buttons
             if (status == 'pending') ...[
               const SizedBox(height: 16),
               Row(
@@ -428,7 +417,6 @@ class _DriverSubscribersScreenState extends State<DriverSubscribersScreen> {
                 ],
               ),
             ],
-            // Chat and Remove buttons for active subscriptions
             if (status == 'active') ...[
               const SizedBox(height: 16),
               Row(

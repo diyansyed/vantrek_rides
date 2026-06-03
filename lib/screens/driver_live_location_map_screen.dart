@@ -71,7 +71,7 @@ class _DriverLiveLocationMapScreenState
             _driverLocation = LatLng(location.latitude, location.longitude);
             _updateMarker();
 
-            // Move camera to driver location
+
             _mapController?.animateCamera(
               CameraUpdate.newLatLng(_driverLocation!),
             );
@@ -142,7 +142,7 @@ class _DriverLiveLocationMapScreenState
             ),
           ),
 
-          // Top Info Card
+
           Positioned(
             top: MediaQuery.of(context).padding.top + 16,
             left: 16,
@@ -172,7 +172,7 @@ class _DriverLiveLocationMapScreenState
             ),
           ),
 
-          // Bottom Status Card
+
           if (_driverLocation != null)
             Positioned(
               bottom: 16,

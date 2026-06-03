@@ -48,14 +48,12 @@ class PlaceDetailsScreen extends ConsumerWidget {
             ),
           ),
 
-          // Content
           SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
 
-                // Institution Name & Type
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
@@ -93,7 +91,6 @@ class PlaceDetailsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 24),
 
-                // Rating Section (if available)
                 if (place.rating != null)
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -146,7 +143,6 @@ class PlaceDetailsScreen extends ConsumerWidget {
 
                 const SizedBox(height: 16),
 
-                // Address Section
                 _buildSection(
                   icon: Icons.location_on,
                   title: 'Address',
@@ -154,7 +150,6 @@ class PlaceDetailsScreen extends ConsumerWidget {
                   color: Colors.red,
                 ),
 
-                // Additional Info
                 _buildSection(
                   icon: Icons.info_outline,
                   title: 'About',
@@ -165,7 +160,6 @@ class PlaceDetailsScreen extends ConsumerWidget {
 
                 const SizedBox(height: 24),
 
-                // Action Buttons
                 Padding(
                   padding: const EdgeInsets.all(24),
                   child: Column(
@@ -207,7 +201,6 @@ class PlaceDetailsScreen extends ConsumerWidget {
                         width: double.infinity,
                         child: OutlinedButton.icon(
                           onPressed: () {
-                            // Open in Google Maps
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Opening in Google Maps...'),

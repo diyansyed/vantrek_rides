@@ -3,7 +3,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-// Search result model
 class PlaceSearchResult {
   final String name;
   final String address;
@@ -16,7 +15,6 @@ class PlaceSearchResult {
   });
 }
 
-// Search provider
 final placeSearchProvider = StateNotifierProvider<PlaceSearchNotifier, AsyncValue<PlaceSearchResult?>>((ref) {
   return PlaceSearchNotifier();
 });
@@ -24,7 +22,6 @@ final placeSearchProvider = StateNotifierProvider<PlaceSearchNotifier, AsyncValu
 class PlaceSearchNotifier extends StateNotifier<AsyncValue<PlaceSearchResult?>> {
   PlaceSearchNotifier() : super(const AsyncValue.data(null));
 
-  // Search for place by name
   Future<void> searchPlace(String query) async {
     if (query.trim().isEmpty) {
       state = const AsyncValue.data(null);
@@ -34,7 +31,6 @@ class PlaceSearchNotifier extends StateNotifier<AsyncValue<PlaceSearchResult?>> 
     state = const AsyncValue.loading();
 
     try {
-      // Use geocoding to find location
       List<Location> locations = await locationFromAddress(query);
 
       if (locations.isEmpty) {
@@ -44,7 +40,6 @@ class PlaceSearchNotifier extends StateNotifier<AsyncValue<PlaceSearchResult?>> 
 
       final location = locations.first;
 
-      // Get place details (reverse geocoding)
       List<Placemark> placemarks = await placemarkFromCoordinates(
         location.latitude,
         location.longitude,
@@ -69,5 +64,4 @@ class PlaceSearchNotifier extends StateNotifier<AsyncValue<PlaceSearchResult?>> 
   }
 }
 
-// Selected search result
 final selectedPlaceProvider = StateProvider<PlaceSearchResult?>((ref) => null);

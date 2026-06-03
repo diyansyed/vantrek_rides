@@ -23,7 +23,7 @@ class RideRequestService {
     final user = _auth.currentUser;
     if (user == null) throw Exception('User not logged in');
 
-    // Get user data
+
     final userDoc = await _firestore.collection('users').doc(user.uid).get();
     final userData = userDoc.data() ?? {};
 
@@ -49,14 +49,11 @@ class RideRequestService {
       'status': 'pending',
     };
 
-    // Save to Firestore in multiple locations for easy querying
     final batch = _firestore.batch();
 
-    // 1. Main ride requests collection
     final requestRef = _firestore.collection('rideRequests').doc(requestId);
     batch.set(requestRef, requestData);
 
-    // 2. Driver's incoming requests subcollection
     final driverRequestRef = _firestore
         .collection('drivers')
         .doc(driverId)
@@ -64,7 +61,6 @@ class RideRequestService {
         .doc(requestId);
     batch.set(driverRequestRef, requestData);
 
-    // 3. User's sent requests subcollection
     final userRequestRef = _firestore
         .collection('users')
         .doc(user.uid)
@@ -77,7 +73,6 @@ class RideRequestService {
     return requestId;
   }
 
-  // Get all pending requests for a driver
   Future<List<Map<String, dynamic>>> getDriverPendingRequests(
       String driverId) async {
     final snapshot = await _firestore
@@ -91,7 +86,6 @@ class RideRequestService {
     return snapshot.docs.map((doc) => doc.data()).toList();
   }
 
-  // Get pending requests count
   Future<int> getDriverPendingRequestsCount(String driverId) async {
     final snapshot = await _firestore
         .collection('drivers')
@@ -103,7 +97,6 @@ class RideRequestService {
     return snapshot.docs.length;
   }
 
-  // Get all requests for a driver (pending, accepted, rejected)
   Stream<List<Map<String, dynamic>>> getDriverAllRequests(String driverId) {
     return _firestore
         .collection('drivers')
@@ -116,7 +109,6 @@ class RideRequestService {
     });
   }
 
-  // Accept a ride request AND CREATE SUBSCRIPTION
   Future<void> acceptRideRequest(String requestId) async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('Driver not logged in');
@@ -127,8 +119,6 @@ class RideRequestService {
     print('ACCEPTING RIDE REQUEST');
     print('Request ID: $requestId');
     print('Driver ID: $driverId');
-
-    // FIRST: Get the request data BEFORE updating
     final requestRef = _firestore.collection('rideRequests').doc(requestId);
     final requestDoc = await requestRef.get();
 
@@ -146,16 +136,13 @@ class RideRequestService {
     print('User Name: $userName');
     print('Driver Name: $driverName');
 
-    // Update status in batch
     final batch = _firestore.batch();
 
-    // Update main collection
     batch.update(requestRef, {
       'status': 'accepted',
       'acceptedAt': FieldValue.serverTimestamp(),
     });
 
-    // Update driver's copy
     final driverRequestRef = _firestore
         .collection('drivers')
         .doc(driverId)
@@ -166,7 +153,6 @@ class RideRequestService {
       'acceptedAt': FieldValue.serverTimestamp(),
     });
 
-    // Update user's copy
     if (userId != null) {
       final userRequestRef = _firestore
           .collection('users')
@@ -182,14 +168,12 @@ class RideRequestService {
     await batch.commit();
     print('✅ Request status updated to accepted');
 
-    // CREATE SUBSCRIPTION - THIS IS THE KEY!
     print('Creating subscription...');
 
     final subscriptionId = _uuid.v4();
     final now = DateTime.now();
     final expiresAt = now.add(const Duration(days: 30));
 
-    // GET MONTHLY PRICE FROM REQUEST DATA
     final monthlyPrice = requestData['monthlyPrice'] ?? 0;
 
     final subscriptionData = {
@@ -210,11 +194,9 @@ class RideRequestService {
 
     final subBatch = _firestore.batch();
 
-    // 1. Main subscriptions collection
     final subRef = _firestore.collection('subscriptions').doc(subscriptionId);
     subBatch.set(subRef, subscriptionData);
 
-    // 2. User's subscriptions subcollection
     final userSubRef = _firestore
         .collection('users')
         .doc(userId)
@@ -222,7 +204,6 @@ class RideRequestService {
         .doc(subscriptionId);
     subBatch.set(userSubRef, subscriptionData);
 
-    // 3. Driver's subscribers subcollection
     final driverSubRef = _firestore
         .collection('drivers')
         .doc(driverId)
@@ -230,7 +211,6 @@ class RideRequestService {
         .doc(subscriptionId);
     subBatch.set(driverSubRef, subscriptionData);
 
-    // 4. Update driver's subscriber count
     final driverRef = _firestore.collection('drivers').doc(driverId);
     subBatch.set(driverRef, {
       'subscriberCount': FieldValue.increment(1),
@@ -242,7 +222,6 @@ class RideRequestService {
     print('═══════════════════════════════════════');
   }
 
-  // Reject a ride request
   Future<void> rejectRideRequest(String requestId) async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('Driver not logged in');
@@ -250,14 +229,12 @@ class RideRequestService {
     final driverId = user.uid;
     final batch = _firestore.batch();
 
-    // Update main collection
     final requestRef = _firestore.collection('rideRequests').doc(requestId);
     batch.update(requestRef, {
       'status': 'rejected',
       'rejectedAt': FieldValue.serverTimestamp(),
     });
 
-    // Update driver's copy
     final driverRequestRef = _firestore
         .collection('drivers')
         .doc(driverId)
@@ -268,7 +245,6 @@ class RideRequestService {
       'rejectedAt': FieldValue.serverTimestamp(),
     });
 
-    // Get userId from request to update user's copy
     final requestDoc = await requestRef.get();
     final userId = requestDoc.data()?['userId'];
 
@@ -287,7 +263,6 @@ class RideRequestService {
     await batch.commit();
   }
 
-  // Get user's sent requests
   Stream<List<Map<String, dynamic>>> getUserSentRequests() {
     final user = _auth.currentUser;
     if (user == null) return Stream.value([]);
@@ -303,19 +278,15 @@ class RideRequestService {
     });
   }
 
-  // Delete a ride request
   Future<void> deleteRideRequest(String requestId, String userId) async {
     final batch = _firestore.batch();
 
-    // Delete from main collection
     final requestRef = _firestore.collection('rideRequests').doc(requestId);
     batch.delete(requestRef);
 
-    // Get the request data to find driverId
     final requestDoc = await requestRef.get();
     final driverId = requestDoc.data()?['driverId'];
 
-    // Delete from driver's subcollection
     if (driverId != null) {
       final driverRequestRef = _firestore
           .collection('drivers')
@@ -324,8 +295,6 @@ class RideRequestService {
           .doc(requestId);
       batch.delete(driverRequestRef);
     }
-
-    // Delete from user's subcollection
     final userRequestRef = _firestore
         .collection('users')
         .doc(userId)

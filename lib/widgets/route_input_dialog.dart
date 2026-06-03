@@ -39,6 +39,7 @@ class _RouteInputDialogState extends State<RouteInputDialog> {
 
   void _addSector(String sector) {
     if (sector.trim().isEmpty) return;
+
     if (_route.contains(sector.trim())) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -111,7 +112,7 @@ class _RouteInputDialogState extends State<RouteInputDialog> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Add the sectors/areas you pass through (in order)',
+              'Add the sectors/areas you serve (in order of preference)',
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.grey[600],
@@ -143,7 +144,7 @@ class _RouteInputDialogState extends State<RouteInputDialog> {
                                 Icon(Icons.route, size: 16, color: Colors.blue[700]),
                                 const SizedBox(width: 6),
                                 Text(
-                                  'Your Route (${_route.length} stops)',
+                                  'Your Service Areas (${_route.length})',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -154,7 +155,7 @@ class _RouteInputDialogState extends State<RouteInputDialog> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              _route.join(' → '),
+                              _route.join(' • '),
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.blue[800],
@@ -306,7 +307,7 @@ class _RouteInputDialogState extends State<RouteInputDialog> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _route.length >= 2
+                    onPressed: _route.isNotEmpty
                         ? () => Navigator.pop(context, _route)
                         : null,
                     style: ElevatedButton.styleFrom(
@@ -317,8 +318,13 @@ class _RouteInputDialogState extends State<RouteInputDialog> {
                       ),
                     ),
                     child: Text(
-                      _route.length >= 2 ? 'Save Route' : 'Min 2 stops',
-                      style: const TextStyle(fontSize: 13,color: Colors.white),
+                      _route.isNotEmpty
+                          ? 'Save ${_route.length} Area${_route.length > 1 ? 's' : ''}'
+                          : 'Add at least 1 area',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

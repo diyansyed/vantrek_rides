@@ -23,7 +23,6 @@ class Institution {
     this.amenities = const [],
   });
 
-  // Convert to Firestore
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -39,7 +38,6 @@ class Institution {
     };
   }
 
-  // Create from Firestore
   factory Institution.fromMap(Map<String, dynamic> map) {
     return Institution(
       id: map['id'] ?? '',

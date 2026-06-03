@@ -120,9 +120,9 @@ class RideRequest {
 }
 
 enum RideRequestStatus {
-  pending,    // Waiting for driver response
-  accepted,   // Driver accepted
-  rejected,   // Driver rejected
-  completed,  // Ride completed
-  cancelled,  // User cancelled
+  pending,
+  accepted,
+  rejected,
+  completed,
+  cancelled,
 }

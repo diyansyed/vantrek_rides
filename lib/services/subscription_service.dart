@@ -13,27 +13,23 @@ class SubscriptionService {
   Future<String> subscribeToDriver({
     required String driverId,
     required String driverName,
-    String? userId,        // Optional: provided when driver accepts
-    String? userName,      // Optional: provided when driver accepts
-    String? userPhone,     // Optional: provided when driver accepts
+    String? userId,
+    String? userName,
+    String? userPhone,
     String paymentMethod = 'free',
   }) async {
-    // Use provided userId or get from current user
     final String finalUserId;
     final String finalUserName;
     final String finalUserPhone;
 
     if (userId != null) {
-      // Driver is adding subscriber (from accept request)
       finalUserId = userId;
       finalUserName = userName ?? 'User';
       finalUserPhone = userPhone ?? '';
     } else {
-      // User is subscribing themselves
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not logged in');
 
-      // Get user data
       final userDoc = await _firestore.collection('users').doc(user.uid).get();
       final userData = userDoc.data() ?? {};
 
@@ -42,7 +38,6 @@ class SubscriptionService {
       finalUserPhone = userData['phoneNumber'] ?? '';
     }
 
-    // Check if already subscribed
     final existing = await _isUserSubscribedToDriver(finalUserId, driverId);
     if (existing) {
       throw Exception('Already subscribed to this driver');
@@ -62,18 +57,16 @@ class SubscriptionService {
       subscribedAt: now,
       expiresAt: expiresAt,
       status: SubscriptionStatus.active,
-      monthlyFee: 0.0, // Free for now
+      monthlyFee: 0.0,
       paymentMethod: paymentMethod,
       lastPaymentDate: now,
     );
 
     final batch = _firestore.batch();
 
-    // 1. Main subscriptions collection
     final subRef = _firestore.collection('subscriptions').doc(subscriptionId);
     batch.set(subRef, subscription.toMap());
 
-    // 2. User's subscriptions subcollection
     final userSubRef = _firestore
         .collection('users')
         .doc(finalUserId)
@@ -81,7 +74,6 @@ class SubscriptionService {
         .doc(subscriptionId);
     batch.set(userSubRef, subscription.toMap());
 
-    // 3. Driver's subscribers subcollection
     final driverSubRef = _firestore
         .collection('drivers')
         .doc(driverId)
@@ -89,7 +81,6 @@ class SubscriptionService {
         .doc(subscriptionId);
     batch.set(driverSubRef, subscription.toMap());
 
-    // 4. Update driver's subscriber count (use set with merge to avoid update errors)
     final driverRef = _firestore.collection('drivers').doc(driverId);
     batch.set(driverRef, {
       'subscriberCount': FieldValue.increment(1),
@@ -100,9 +91,7 @@ class SubscriptionService {
     return subscriptionId;
   }
 
-  /// Internal helper to check subscription
   Future<bool> _isUserSubscribedToDriver(String userId, String driverId) async {
-    // Check from driver's subscribers (more permissive in rules)
     try {
       final snapshot = await _firestore
           .collection('drivers')
@@ -115,7 +104,6 @@ class SubscriptionService {
 
       if (snapshot.docs.isEmpty) return false;
 
-      // Check if not expired
       final subscription = DriverSubscription.fromMap(snapshot.docs.first.data());
       return subscription.isActive;
     } catch (e) {
@@ -129,7 +117,6 @@ class SubscriptionService {
     final user = _auth.currentUser;
     if (user == null) return false;
 
-    // Check from driver's subscribers (more permissive in rules)
     try {
       final snapshot = await _firestore
           .collection('drivers')
@@ -142,7 +129,6 @@ class SubscriptionService {
 
       if (snapshot.docs.isEmpty) return false;
 
-      // Check if not expired
       final subscription = DriverSubscription.fromMap(snapshot.docs.first.data());
       return subscription.isActive;
     } catch (e) {
@@ -166,7 +152,6 @@ class SubscriptionService {
         .map((doc) => DriverSubscription.fromMap(doc.data()))
         .toList();
 
-    // Sort by expiry date
     subscriptions.sort((a, b) => a.expiresAt.compareTo(b.expiresAt));
 
     return subscriptions;
@@ -185,13 +170,11 @@ class SubscriptionService {
         .map((doc) => DriverSubscription.fromMap(doc.data()))
         .toList();
 
-    // Sort by subscribed date (newest first)
     subscribers.sort((a, b) => b.subscribedAt.compareTo(a.subscribedAt));
 
     return subscribers;
   }
 
-  /// Get driver's active subscriber count
   Future<int> getDriverSubscriberCount(String driverId) async {
     final snapshot = await _firestore
         .collection('drivers')
@@ -200,7 +183,6 @@ class SubscriptionService {
         .where('status', isEqualTo: 'active')
         .get();
 
-    // Filter out expired ones
     int activeCount = 0;
     for (var doc in snapshot.docs) {
       final sub = DriverSubscription.fromMap(doc.data());
@@ -210,11 +192,9 @@ class SubscriptionService {
     return activeCount;
   }
 
-  /// Cancel subscription
   Future<void> cancelSubscription(String subscriptionId, String reason) async {
     final batch = _firestore.batch();
 
-    // Get subscription to find user and driver IDs
     final subDoc = await _firestore
         .collection('subscriptions')
         .doc(subscriptionId)
@@ -230,11 +210,9 @@ class SubscriptionService {
       'cancellationReason': reason,
     };
 
-    // Update main collection
     final subRef = _firestore.collection('subscriptions').doc(subscriptionId);
     batch.update(subRef, updateData);
 
-    // Update user's copy
     final userSubRef = _firestore
         .collection('users')
         .doc(subscription.userId)
@@ -242,7 +220,6 @@ class SubscriptionService {
         .doc(subscriptionId);
     batch.update(userSubRef, updateData);
 
-    // Update driver's copy
     final driverSubRef = _firestore
         .collection('drivers')
         .doc(subscription.driverId)
@@ -250,7 +227,6 @@ class SubscriptionService {
         .doc(subscriptionId);
     batch.update(driverSubRef, updateData);
 
-    // Decrement driver's subscriber count
     final driverRef = _firestore.collection('drivers').doc(subscription.driverId);
     batch.set(driverRef, {
       'subscriberCount': FieldValue.increment(-1),
@@ -259,11 +235,9 @@ class SubscriptionService {
     await batch.commit();
   }
 
-  /// Renew subscription (extend by 30 days)
   Future<void> renewSubscription(String subscriptionId) async {
     final batch = _firestore.batch();
 
-    // Get subscription
     final subDoc = await _firestore
         .collection('subscriptions')
         .doc(subscriptionId)
@@ -280,7 +254,6 @@ class SubscriptionService {
       'lastPaymentDate': DateTime.now().toIso8601String(),
     };
 
-    // Update all 3 locations
     final subRef = _firestore.collection('subscriptions').doc(subscriptionId);
     batch.update(subRef, updateData);
 
@@ -301,7 +274,6 @@ class SubscriptionService {
     await batch.commit();
   }
 
-  /// Get subscription details
   Future<DriverSubscription?> getSubscription(String subscriptionId) async {
     final doc = await _firestore
         .collection('subscriptions')
@@ -312,7 +284,6 @@ class SubscriptionService {
     return DriverSubscription.fromMap(doc.data()!);
   }
 
-  /// Get specific subscription between user and driver
   Future<DriverSubscription?> getSubscriptionByUserAndDriver(
       String userId,
       String driverId,
@@ -329,7 +300,6 @@ class SubscriptionService {
     return DriverSubscription.fromMap(snapshot.docs.first.data());
   }
 
-  /// Stream of user's subscriptions (real-time)
   Stream<List<DriverSubscription>> streamUserSubscriptions(String userId) {
     return _firestore
         .collection('users')
@@ -346,7 +316,6 @@ class SubscriptionService {
     });
   }
 
-  /// Stream of driver's subscribers (real-time)
   Stream<List<DriverSubscription>> streamDriverSubscribers(String driverId) {
     return _firestore
         .collection('drivers')

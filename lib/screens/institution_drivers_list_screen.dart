@@ -41,8 +41,9 @@ class _InstitutionDriversListScreenState
   List<InstitutionDriver> _drivers = [];
   bool _isLoading = true;
   bool _showOnlineOnly = false;
-  Set<String> _sentRequestDriverIds = {}; // Track drivers we've sent requests to
-  Set<String> _subscribedDriverIds = {}; // Track drivers we're already subscribed to
+  bool _filterByRoute = true;
+  Set<String> _sentRequestDriverIds = {};
+  Set<String> _subscribedDriverIds = {};
   double _distanceKm = 0.0;
   int _monthlyPrice = 0;
 
@@ -135,11 +136,40 @@ class _InstitutionDriversListScreenState
     }
   }
 
-  List<InstitutionDriver> get _filteredDrivers {
-    if (_showOnlineOnly) {
-      return _drivers.where((d) => d.isOnline).toList();
+  String _normalizeLocation(String location) {
+    return location
+        .toLowerCase()
+        .replaceAll(RegExp(r'[-–—]'), '')
+        .replaceAll(RegExp(r'[^\w\s]'), '')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+  }
+
+  bool _matchesUserLocation(InstitutionDriver driver) {
+    if (driver.route.isEmpty) return false;
+    final normalizedUser = _normalizeLocation(widget.pickupAddress);
+    for (final stop in driver.route) {
+      final normalizedStop = _normalizeLocation(stop);
+      if (normalizedStop.isEmpty) continue;
+      if (normalizedUser.contains(normalizedStop)) return true;
+      // Check each token of the route stop (e.g. "phase" and "8" from "Phase 8")
+      final tokens = normalizedStop.split(' ').where((t) => t.length > 1).toList();
+      for (final token in tokens) {
+        if (normalizedUser.contains(token)) return true;
+      }
     }
-    return _drivers;
+    return false;
+  }
+
+  List<InstitutionDriver> get _filteredDrivers {
+    var drivers = _drivers;
+    if (_showOnlineOnly) {
+      drivers = drivers.where((d) => d.isOnline).toList();
+    }
+    if (_filterByRoute) {
+      drivers = drivers.where(_matchesUserLocation).toList();
+    }
+    return drivers;
   }
 
   @override
@@ -206,6 +236,7 @@ class _InstitutionDriversListScreenState
                 children: [
                   _buildPickupInfo(),
                   _buildPriceInfo(),
+                  _buildRouteFilterBar(),
                   _buildStatsHeader(filteredDrivers),
                 ],
               ),
@@ -267,6 +298,100 @@ class _InstitutionDriversListScreenState
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRouteFilterBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () => setState(() => _filterByRoute = true),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: _filterByRoute
+                      ? const Color(0xFF2196F3)
+                      : Colors.grey[100],
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(10),
+                  ),
+                  border: Border.all(
+                    color: _filterByRoute
+                        ? const Color(0xFF2196F3)
+                        : Colors.grey[300]!,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.route,
+                      size: 16,
+                      color: _filterByRoute ? Colors.white : Colors.grey[600],
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'On My Route',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color:
+                            _filterByRoute ? Colors.white : Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () => setState(() => _filterByRoute = false),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: !_filterByRoute
+                      ? const Color(0xFF2196F3)
+                      : Colors.grey[100],
+                  borderRadius: const BorderRadius.horizontal(
+                    right: Radius.circular(10),
+                  ),
+                  border: Border.all(
+                    color: !_filterByRoute
+                        ? const Color(0xFF2196F3)
+                        : Colors.grey[300]!,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.people,
+                      size: 16,
+                      color: !_filterByRoute ? Colors.white : Colors.grey[600],
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Show All',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color:
+                            !_filterByRoute ? Colors.white : Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -383,13 +508,27 @@ class _InstitutionDriversListScreenState
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Text(
-              '${drivers.length} ${drivers.length == 1 ? 'Driver' : 'Drivers'}',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${drivers.length} ${drivers.length == 1 ? 'Driver' : 'Drivers'}',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  _filterByRoute
+                      ? 'matching your location'
+                      : 'registered at this institution',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -418,7 +557,11 @@ class _InstitutionDriversListScreenState
             ),
             const SizedBox(height: 32),
             Text(
-              _showOnlineOnly ? 'No Online Drivers' : 'No Drivers Yet',
+              _filterByRoute
+                  ? 'No Route Matches'
+                  : _showOnlineOnly
+                      ? 'No Online Drivers'
+                      : 'No Drivers Yet',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -427,9 +570,11 @@ class _InstitutionDriversListScreenState
             ),
             const SizedBox(height: 12),
             Text(
-              _showOnlineOnly
-                  ? 'No drivers are currently online at this institution'
-                  : 'No drivers have registered at this institution yet',
+              _filterByRoute
+                  ? 'No drivers cover your area (${widget.pickupAddress.split(',').first}). Try showing all drivers.'
+                  : _showOnlineOnly
+                      ? 'No drivers are currently online at this institution'
+                      : 'No drivers have registered at this institution yet',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15,
@@ -437,15 +582,20 @@ class _InstitutionDriversListScreenState
                 height: 1.5,
               ),
             ),
-            if (_showOnlineOnly) ...[
+            if (_filterByRoute || _showOnlineOnly) ...[
               const SizedBox(height: 24),
-              OutlinedButton(
+              ElevatedButton.icon(
                 onPressed: () {
                   setState(() {
+                    _filterByRoute = false;
                     _showOnlineOnly = false;
                   });
                 },
-                style: OutlinedButton.styleFrom(
+                icon: const Icon(Icons.people, size: 18),
+                label: const Text('Show All Drivers'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2196F3),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -453,8 +603,8 @@ class _InstitutionDriversListScreenState
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  elevation: 0,
                 ),
-                child: const Text('Show All Drivers'),
               ),
             ],
           ],
@@ -464,9 +614,9 @@ class _InstitutionDriversListScreenState
   }
 
   Widget _buildDriverCard(InstitutionDriver driver) {
-    // Check if already subscribed or request sent
     final isSubscribed = _subscribedDriverIds.contains(driver.driverId);
     final hasRequestPending = _sentRequestDriverIds.contains(driver.driverId);
+    final coversUserArea = _matchesUserLocation(driver);
 
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -508,36 +658,69 @@ class _InstitutionDriversListScreenState
                           color: Colors.black87,
                         ),
                       ),
-                      if (isSubscribed) ...[
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.green[50],
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.green[200]!),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.check_circle,
-                                  size: 14, color: Colors.green[700]),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Already Subscribed',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.green[700],
-                                ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          if (!_filterByRoute && coversUserArea)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
+                              decoration: BoxDecoration(
+                                color: Colors.blue[50],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.blue[200]!),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.route,
+                                      size: 12, color: Colors.blue[700]),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'Covers your area',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.blue[700],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (!_filterByRoute && coversUserArea && isSubscribed)
+                            const SizedBox(width: 6),
+                          if (isSubscribed)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.green[50],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.green[200]!),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.check_circle,
+                                      size: 12, color: Colors.green[700]),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'Already Subscribed',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.green[700],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

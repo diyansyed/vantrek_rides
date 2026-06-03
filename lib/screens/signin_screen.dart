@@ -35,7 +35,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      // Always login as user
       await ref.read(authControllerProvider.notifier).signInWithEmailPassword(
         email: _emailController.text,
         password: _passwordController.text,
@@ -91,11 +90,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo
                   _buildLogo(),
                   const SizedBox(height: 40),
 
-                  // Sign-In Title
                   const Text(
                     'Welcome Back',
                     style: TextStyle(
@@ -106,7 +103,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   ),
                   const SizedBox(height: 8),
 
-                  // Subtitle
                   Text(
                     'Sign in to continue',
                     style: TextStyle(
@@ -116,19 +112,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Email Field
                   _buildEmailField(),
                   const SizedBox(height: 16),
 
-                  // Password Field
                   _buildPasswordField(),
                   const SizedBox(height: 32),
 
-                  // Login Button
                   _buildLoginButton(authState.isLoading),
                   const SizedBox(height: 24),
 
-                  // Sign Up Link
                   _buildSignUpLink(),
                 ],
               ),

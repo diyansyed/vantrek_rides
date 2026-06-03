@@ -59,7 +59,6 @@ class _DriverRatingsScreenState extends State<DriverRatingsScreen> {
       ),
       body: Column(
         children: [
-          // Stats Header
           if (_isLoadingStats)
             const Padding(
               padding: EdgeInsets.all(24.0),
@@ -68,7 +67,6 @@ class _DriverRatingsScreenState extends State<DriverRatingsScreen> {
           else if (_stats != null)
             _buildStatsHeader(_stats!),
 
-          // Ratings List
           Expanded(
             child: StreamBuilder<List<Rating>>(
               stream: _ratingService.getDriverRatings(widget.driverId),

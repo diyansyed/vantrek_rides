@@ -102,11 +102,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
         ? (chat['driverUnreadCount'] ?? 0)
         : (chat['userUnreadCount'] ?? 0);
 
-    // Get driver and user IDs
     final driverId = chat['driverId'] ?? '';
     final userId = chat['userId'] ?? '';
 
-    // FIX: Always fetch from drivers/{driverId}/subscribers collection!
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('drivers')

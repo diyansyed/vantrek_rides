@@ -234,7 +234,6 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Row(
               children: [
                 CircleAvatar(
@@ -306,7 +305,6 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
             const Divider(height: 1),
             const SizedBox(height: 16),
 
-            // Pickup Location
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -357,7 +355,6 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
 
             const SizedBox(height: 12),
 
-            // Monthly Price Info
             if (monthlyPrice > 0)
               Container(
                 padding: const EdgeInsets.all(12),
@@ -400,7 +397,6 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
 
             if (monthlyPrice > 0) const SizedBox(height: 12),
 
-            // Timestamp
             Row(
               children: [
                 Icon(Icons.access_time, size: 18, color: Colors.grey[600]),
@@ -417,7 +413,6 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
               ],
             ),
 
-            // Action Buttons (only for pending requests)
             if (status == 'pending') ...[
               const SizedBox(height: 16),
               Row(
@@ -458,7 +453,6 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
               ),
             ],
 
-            // Call Button (for accepted requests)
             if (status == 'accepted' && userPhone.isNotEmpty) ...[
               const SizedBox(height: 16),
               SizedBox(
@@ -517,7 +511,6 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
 
   void _acceptRequest(String requestId) async {
     try {
-      // Show loading
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -528,10 +521,8 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
 
       await _rideRequestService.acceptRideRequest(requestId);
 
-      // Close loading
       if (mounted) Navigator.pop(context);
 
-      // Show success
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -541,10 +532,8 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
         );
       }
     } catch (e) {
-      // Close loading
       if (mounted) Navigator.pop(context);
 
-      // Show error
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -558,7 +547,6 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
 
   void _rejectRequest(String requestId) async {
     try {
-      // Show loading
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -569,10 +557,8 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
 
       await _rideRequestService.rejectRideRequest(requestId);
 
-      // Close loading
       if (mounted) Navigator.pop(context);
 
-      // Show success
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -582,10 +568,8 @@ class _DriverRideRequestsScreenState extends State<DriverRideRequestsScreen> {
         );
       }
     } catch (e) {
-      // Close loading
       if (mounted) Navigator.pop(context);
 
-      // Show error
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

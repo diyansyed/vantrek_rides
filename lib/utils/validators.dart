@@ -1,8 +1,8 @@
 import 'constants.dart';
 
-/// Form Validators
+
 class Validators {
-  // Email Validator
+
   static String? email(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
@@ -15,7 +15,6 @@ class Validators {
     return null;
   }
 
-  // Password Validator
   static String? password(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
@@ -32,7 +31,7 @@ class Validators {
     return null;
   }
 
-  // Name Validator
+
   static String? name(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your name';
@@ -49,7 +48,7 @@ class Validators {
     return null;
   }
 
-  // Phone Validator
+
   static String? phone(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your phone number';
@@ -62,7 +61,7 @@ class Validators {
     return null;
   }
 
-  // Required Field Validator
+
   static String? required(String? value, {String? fieldName}) {
     if (value == null || value.isEmpty) {
       return 'Please enter ${fieldName ?? 'this field'}';
@@ -70,7 +69,7 @@ class Validators {
     return null;
   }
 
-  // Confirm Password Validator
+
   static String? confirmPassword(String? value, String password) {
     if (value == null || value.isEmpty) {
       return 'Please confirm your password';
@@ -96,7 +95,7 @@ class Validators {
     return null;
   }
 
-  // Max Length Validator
+
   static String? maxLength(String? value, int maxLength, {String? fieldName}) {
     if (value != null && value.length > maxLength) {
       return '${fieldName ?? 'This field'} must be less than $maxLength characters';

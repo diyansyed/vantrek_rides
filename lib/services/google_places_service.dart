@@ -3,18 +3,16 @@ import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GooglePlacesService {
-  // IMPORTANT: Replace with your actual Google API key
   static const String _apiKey = 'AIzaSyCISadp98kbi4BbVa_MD_bqx5eS-KF6tNk';
 
   static const String _baseUrl = 'https://maps.googleapis.com/maps/api/place';
 
-  // Search for educational institutions
   Future<List<PlaceResult>> searchInstitutions(
     String query, {
     LatLng? location,
   }) async {
     try {
-      // Build URL with parameters
+
       final locationStr = location != null
           ? '${location.latitude},${location.longitude}'
           : '33.6844,73.0479'; // Islamabad coordinates as default
@@ -51,7 +49,6 @@ class GooglePlacesService {
     }
   }
 
-  // Get autocomplete suggestions
   Future<List<AutocompleteResult>> getAutocompleteSuggestions(
     String input,
   ) async {
@@ -87,7 +84,6 @@ class GooglePlacesService {
     }
   }
 
-  // Get place details by place_id
   Future<PlaceResult?> getPlaceDetails(String placeId) async {
     try {
       final url = Uri.parse(
@@ -113,7 +109,6 @@ class GooglePlacesService {
     }
   }
 
-  // Search nearby educational institutions
   Future<List<PlaceResult>> searchNearby(
     LatLng location, {
     int radius = 10000,
@@ -147,7 +142,6 @@ class GooglePlacesService {
   }
 }
 
-// Models
 class PlaceResult {
   final String placeId;
   final String name;

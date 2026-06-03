@@ -128,7 +128,7 @@ class _SelectDriverToRateScreenState extends State<SelectDriverToRateScreen> {
           padding: const EdgeInsets.all(20),
           child: Row(
             children: [
-              // Avatar
+
               CircleAvatar(
                 radius: 32,
                 backgroundColor: const Color(0xFF2196F3),
@@ -145,7 +145,6 @@ class _SelectDriverToRateScreenState extends State<SelectDriverToRateScreen> {
               ),
               const SizedBox(width: 16),
 
-              // Driver Info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,7 +201,7 @@ class _SelectDriverToRateScreenState extends State<SelectDriverToRateScreen> {
                 ),
               ),
 
-              // Rate Icon
+
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(

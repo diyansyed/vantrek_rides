@@ -52,8 +52,8 @@ class InstitutionDriver {
   final double rating;
   final int totalRides;
   final List<String> route;
-  final List<String> pickupTimes;   // NEW: Multiple pickup times
-  final List<String> dropoffTimes;  // NEW: Multiple dropoff times
+  final List<String> pickupTimes;
+  final List<String> dropoffTimes;
 
   InstitutionDriver({
     required this.driverId,
@@ -65,8 +65,8 @@ class InstitutionDriver {
     required this.rating,
     required this.totalRides,
     this.route = const [],
-    this.pickupTimes = const [],   // NEW
-    this.dropoffTimes = const [],  // NEW
+    this.pickupTimes = const [],
+    this.dropoffTimes = const [],
   });
 
   factory InstitutionDriver.fromMap(Map<String, dynamic> data) {
@@ -96,8 +96,8 @@ class InstitutionDriver {
       'rating': rating,
       'totalRides': totalRides,
       'route': route,
-      'pickupTimes': pickupTimes,     // NEW
-      'dropoffTimes': dropoffTimes,   // NEW
+      'pickupTimes': pickupTimes,
+      'dropoffTimes': dropoffTimes,
     };
   }
 }

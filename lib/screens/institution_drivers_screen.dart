@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/institution_model.dart';
-// Mock Driver data for specific institution
 class Driver {
   final String id;
   final String name;
@@ -24,10 +23,8 @@ class Driver {
   });
 }
 
-// Mock drivers provider for institution
 final institutionDriversProvider =
 Provider.family<List<Driver>, String>((ref, institutionId) {
-  // This would come from Firestore in production
   final allDrivers = [
     Driver(
       id: '1',

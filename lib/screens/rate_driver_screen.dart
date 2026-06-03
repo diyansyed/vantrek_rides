@@ -107,7 +107,6 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
             children: [
               const SizedBox(height: 20),
 
-              // Driver Avatar
               CircleAvatar(
                 radius: 50,
                 backgroundColor: const Color(0xFF2196F3),
@@ -125,7 +124,6 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
 
               const SizedBox(height: 16),
 
-              // Driver Name
               Text(
                 widget.driverName,
                 style: const TextStyle(
@@ -147,7 +145,6 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
 
               const SizedBox(height: 32),
 
-              // Star Rating
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -206,7 +203,6 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
 
               const SizedBox(height: 24),
 
-              // Review Text Field
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -239,7 +235,6 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
 
               const SizedBox(height: 32),
 
-              // Submit Button
               SizedBox(
                 width: double.infinity,
                 height: 54,
@@ -274,7 +269,6 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
 
               const SizedBox(height: 16),
 
-              // Skip Button
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(

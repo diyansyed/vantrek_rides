@@ -6,7 +6,6 @@ class RatingService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Submit a rating for a driver
   Future<void> rateDriver({
     required String driverId,
     required String driverName,
@@ -17,14 +16,12 @@ class RatingService {
     final currentUser = _auth.currentUser;
     if (currentUser == null) throw 'User not logged in';
 
-    // Get user name
     final userDoc = await _firestore
         .collection('users')
         .doc(currentUser.uid)
         .get();
     final userName = userDoc.data()?['name'] ?? 'User';
 
-    // Create rating
     final ratingData = Rating(
       ratingId: '',
       userId: currentUser.uid,
@@ -37,17 +34,13 @@ class RatingService {
       rideId: rideId,
     );
 
-    // Save to ratings collection
     await _firestore.collection('ratings').add(ratingData.toMap());
 
-    // Update driver's average rating
     await _updateDriverRating(driverId);
   }
 
-  // Update driver's average rating
   Future<void> _updateDriverRating(String driverId) async {
     try {
-      // Get all ratings for this driver
       final ratingsSnapshot = await _firestore
           .collection('ratings')
           .where('driverId', isEqualTo: driverId)
@@ -57,7 +50,6 @@ class RatingService {
         return;
       }
 
-      // Calculate average
       double totalRating = 0;
       int count = 0;
 
@@ -69,7 +61,6 @@ class RatingService {
 
       final averageRating = totalRating / count;
 
-      // Update driver document
       await _firestore.collection('drivers').doc(driverId).update({
         'rating': averageRating,
         'totalRatings': count,
@@ -79,7 +70,6 @@ class RatingService {
     }
   }
 
-  // Check if user has already rated a driver
   Future<bool> hasUserRatedDriver(String driverId) async {
     final currentUser = _auth.currentUser;
     if (currentUser == null) return false;
@@ -94,7 +84,6 @@ class RatingService {
     return snapshot.docs.isNotEmpty;
   }
 
-  // Get user's rating for a specific driver
   Future<Rating?> getUserRatingForDriver(String driverId) async {
     final currentUser = _auth.currentUser;
     if (currentUser == null) return null;
@@ -111,7 +100,6 @@ class RatingService {
     return Rating.fromMap(snapshot.docs.first.data(), snapshot.docs.first.id);
   }
 
-  // Get all ratings for a driver (for display)
   Stream<List<Rating>> getDriverRatings(String driverId) {
     return _firestore
         .collection('ratings')
@@ -125,7 +113,6 @@ class RatingService {
     });
   }
 
-  // Get all ratings by a user
   Stream<List<Rating>> getUserRatings(String userId) {
     return _firestore
         .collection('ratings')
@@ -139,7 +126,6 @@ class RatingService {
     });
   }
 
-  // Update an existing rating
   Future<void> updateRating({
     required String ratingId,
     required double rating,
@@ -154,12 +140,10 @@ class RatingService {
       'review': review,
     });
 
-    // Update driver's average rating
     final ratingData = Rating.fromMap(ratingDoc.data()!, ratingId);
     await _updateDriverRating(ratingData.driverId);
   }
 
-  // Delete a rating
   Future<void> deleteRating(String ratingId) async {
     final ratingDoc = await _firestore.collection('ratings').doc(ratingId).get();
 
@@ -169,11 +153,9 @@ class RatingService {
 
     await _firestore.collection('ratings').doc(ratingId).delete();
 
-    // Update driver's average rating
     await _updateDriverRating(ratingData.driverId);
   }
 
-  // Get rating statistics for a driver
   Future<Map<String, dynamic>> getDriverRatingStats(String driverId) async {
     final ratingsSnapshot = await _firestore
         .collection('ratings')

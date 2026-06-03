@@ -109,21 +109,17 @@ class _DriverDashboardScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Subscription Banner (if expired)
               if (driverProfile != null && !driverProfile.isSubscriptionActive)
                 _buildSubscriptionBanner(driverProfile),
 
-              // Status Toggle
               _buildStatusToggle(isOnline),
 
               const SizedBox(height: 16),
 
-              // Online Status Message
               if (isOnline) _buildOnlineMessage(),
 
               const SizedBox(height: 16),
 
-              // Stats Cards Row (Subscribers & Rating)
               Row(
                 children: [
                   Expanded(
@@ -148,7 +144,6 @@ class _DriverDashboardScreenState
 
               const SizedBox(height: 16),
 
-              // Main Action Cards Row
               Row(
                 children: [
                   Expanded(child: _buildNewRideRequestsCard()),
@@ -159,7 +154,6 @@ class _DriverDashboardScreenState
 
               const SizedBox(height: 16),
 
-              // Secondary Cards Row
               Row(
                 children: [
                   Expanded(child: _buildChatWithUserCard()),
@@ -300,7 +294,6 @@ class _DriverDashboardScreenState
 
               try {
                 if (currentStatus) {
-                  // Going offline - stop sharing location
                   await _locationService.stopSharingLocation();
                   ref.read(driverOnlineStatusProvider.notifier).state = false;
                   Navigator.pop(context); // Close loading
@@ -420,7 +413,6 @@ class _DriverDashboardScreenState
             builder: (context) => const DriverRideRequestsScreen(),
           ),
         );
-        // Refresh count after returning
         _loadPendingRequestsCount();
       },
       child: Container(
@@ -494,7 +486,6 @@ class _DriverDashboardScreenState
 
     return GestureDetector(
       onTap: () {
-        // Always navigate to registered institutions list screen
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -631,7 +622,6 @@ class _DriverDashboardScreenState
             builder: (context) => const DriverSubscribersScreen(),
           ),
         );
-        // Refresh count after returning
         _loadSubscriberCount();
       },
       child: Container(

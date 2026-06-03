@@ -27,13 +27,12 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedIndex = 0;
   StreamSubscription? _driverProfileSubscription;
-  String _searchQuery = '';  // NEW: Track search query
+  String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();  // NEW: Search controller
 
   @override
   void initState() {
     super.initState();
-    // Wait for widget to build, then check driver status
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkDriverStatus();
     });
@@ -42,17 +41,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void dispose() {
     _driverProfileSubscription?.cancel();
-    _searchController.dispose();  // NEW: Dispose controller
+    _searchController.dispose();
     super.dispose();
   }
 
   Future<void> _checkDriverStatus() async {
-    // Get current Firebase user directly
     final firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) return;
 
     try {
-      // Set up real-time listener for driver document
       _driverProfileSubscription = FirebaseFirestore.instance
           .collection('drivers')
           .doc(firebaseUser.uid)
@@ -152,14 +149,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             const SizedBox(height: 16),
 
-            // Search Bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: _buildSearchBar(),
             ),
             const SizedBox(height: 24),
 
-            // Main Action Cards
             if (_shouldShow(['find', 'driver', 'search', 'school']))
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -247,7 +242,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 _shouldShow(['live', 'track', 'location', 'gps']))
               const SizedBox(height: 20),
 
-            // Secondary Action Cards
             if (_shouldShow(['message', 'chat', 'driver']) ||
                 _shouldShow(['rate', 'feedback', 'review', 'star']))
               Padding(
@@ -296,7 +290,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
 
-            // Show "No results" message if search has no matches
             if (_searchQuery.isNotEmpty &&
                 !_shouldShow(['find', 'driver', 'search', 'school']) &&
                 !_shouldShow(['live', 'track', 'location', 'gps']) &&
@@ -350,7 +343,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // NEW: Helper method to determine if a widget should be shown based on search
   bool _shouldShow(List<String> keywords) {
     if (_searchQuery.isEmpty) return true;
     return keywords.any((keyword) => keyword.contains(_searchQuery) || _searchQuery.contains(keyword));
@@ -610,16 +602,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final authState = ref.read(authControllerProvider);
     final user = authState.user;
 
-    // Get current Firebase user
     final firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) return;
 
-    // REAL-TIME CHECK: Check both collections every time drawer opens
     bool isApprovedDriver = false;
     bool hasPendingApplication = false;
 
     try {
-      // Check if user is in drivers collection (approved)
       final driverDoc = await FirebaseFirestore.instance
           .collection('drivers')
           .doc(firebaseUser.uid)
@@ -627,7 +616,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
       isApprovedDriver = driverDoc.exists;
 
-      // If not approved, check for pending application
       if (!isApprovedDriver) {
         final applicationSnapshot = await FirebaseFirestore.instance
             .collection('driver_applications')
@@ -639,7 +627,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         hasPendingApplication = applicationSnapshot.docs.isNotEmpty;
       }
 
-      // Update provider state to match reality
       if (isApprovedDriver && mounted) {
         ref.read(isDriverProvider.notifier).state = true;
         if (driverDoc.data() != null) {
@@ -717,10 +704,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     : (hasPendingApplication ? Colors.orange : null),
               ),
               onTap: () {
-                Navigator.pop(context); // Close drawer
+                Navigator.pop(context);
 
                 if (isApprovedDriver) {
-                  // Already approved - go to dashboard
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -728,7 +714,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   );
                 } else if (hasPendingApplication) {
-                  // Application pending - show pending screen
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -736,7 +721,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   );
                 } else {
-                  // Not registered - show registration form
                   Navigator.push(
                     context,
                     MaterialPageRoute(

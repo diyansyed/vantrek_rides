@@ -40,7 +40,6 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
     if (confirm != true) return;
 
     try {
-      // Get subscription data to find userId and driverId
       final subDoc = await _firestore.collection('subscriptions').doc(subscriptionId).get();
 
       if (!subDoc.exists) {
@@ -54,11 +53,9 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
       // Delete from all 3 locations using batch
       final batch = _firestore.batch();
 
-      // 1. Main subscriptions collection
       final subRef = _firestore.collection('subscriptions').doc(subscriptionId);
       batch.delete(subRef);
 
-      // 2. User's driverSubscriptions
       final userSubRef = _firestore
           .collection('users')
           .doc(userId)
@@ -66,7 +63,6 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
           .doc(subscriptionId);
       batch.delete(userSubRef);
 
-      // 3. Driver's subscribers
       final driverSubRef = _firestore
           .collection('drivers')
           .doc(driverId)
@@ -74,7 +70,6 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
           .doc(subscriptionId);
       batch.delete(driverSubRef);
 
-      // 4. Decrement subscriber count
       final driverRef = _firestore.collection('drivers').doc(driverId);
       batch.set(driverRef, {
         'subscriberCount': FieldValue.increment(-1),
@@ -298,7 +293,6 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
                           ],
                         ),
                       ),
-                      // Price
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -322,7 +316,6 @@ class _UserSubscribedDriversScreenState extends State<UserSubscribedDriversScree
                     ],
                   ),
                   const SizedBox(height: 16),
-                  // Action Buttons
                   Row(
                     children: [
                       Expanded(

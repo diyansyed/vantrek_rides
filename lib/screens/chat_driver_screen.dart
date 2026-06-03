@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-// Message Model
 class ChatMessage {
   final String id;
   final String text;
@@ -19,7 +18,7 @@ class ChatMessage {
   });
 }
 
-// Chat State Provider
+
 final chatMessagesProvider =
 StateNotifierProvider<ChatMessagesNotifier, List<ChatMessage>>(
       (ref) => ChatMessagesNotifier(),
@@ -62,7 +61,6 @@ class ChatMessagesNotifier extends StateNotifier<List<ChatMessage>> {
 
     state = [...state, newMessage];
 
-    // Simulate driver response after 2 seconds
     Future.delayed(const Duration(seconds: 2), () {
       final responses = [
         'Got it, thanks!',
@@ -118,7 +116,7 @@ class _ChatWithDriverScreenState extends ConsumerState<ChatWithDriverScreen> {
   @override
   void initState() {
     super.initState();
-    // Mark messages as read when screen opens
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(chatMessagesProvider.notifier).markAllAsRead();
     });
@@ -133,7 +131,6 @@ class _ChatWithDriverScreenState extends ConsumerState<ChatWithDriverScreen> {
 
     _messageController.clear();
 
-    // Scroll to bottom
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -236,10 +233,8 @@ class _ChatWithDriverScreenState extends ConsumerState<ChatWithDriverScreen> {
             ),
           ),
 
-          // Quick Replies
           _buildQuickReplies(),
 
-          // Message Input
           _buildMessageInput(),
         ],
       ),

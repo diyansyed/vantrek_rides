@@ -25,7 +25,7 @@ class Chat {
     this.driverUnreadCount = 0,
   });
 
-  // Generate chat ID from user and driver IDs
+
   static String generateChatId(String userId, String driverId) {
     return 'user_${userId}_driver_$driverId';
   }

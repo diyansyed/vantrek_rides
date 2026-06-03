@@ -27,7 +27,6 @@ class _DriverInstitutionSearchScreenState
   List<dynamic> _searchResults = []; // NEW: Store results locally
   bool _isSearching = false; // NEW: Loading state
 
-  // Islamabad initial position
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(33.6844, 73.0479), // Islamabad
     zoom: 12,
@@ -58,7 +57,6 @@ class _DriverInstitutionSearchScreenState
             mapToolbarEnabled: false,
           ),
 
-          // Search Bar
           Positioned(
             top: MediaQuery.of(context).padding.top + 16,
             left: 16,
@@ -104,8 +102,6 @@ class _DriverInstitutionSearchScreenState
                               _showSuggestions = true;
                               _isSearching = true;
                             });
-
-                            // Format query better for universities
                             String searchQuery = value;
                             if (!value.toLowerCase().contains('university') &&
                                 !value.toLowerCase().contains('college') &&
@@ -204,14 +200,12 @@ class _DriverInstitutionSearchScreenState
                             });
                             FocusScope.of(context).unfocus();
 
-                            // Get place details
                             final placesService =
                             ref.read(placesServiceProvider);
                             final details = await placesService
                                 .getPlaceDetails(suggestion.placeId);
 
                             if (details != null) {
-                              // Show institution and ask for route
                               _showInstitutionConfirmation(
                                 details.name,
                                 details.location,
@@ -224,7 +218,6 @@ class _DriverInstitutionSearchScreenState
                     ),
                   ),
 
-                // Loading indicator
                 if (_showSuggestions && _isSearching && _searchResults.isEmpty)
                   Container(
                     margin: const EdgeInsets.only(top: 8),
@@ -311,7 +304,6 @@ class _DriverInstitutionSearchScreenState
       _dropoffTimes = times['dropoffTimes']!;
     });
 
-    // Then show confirmation dialog
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -341,7 +333,6 @@ class _DriverInstitutionSearchScreenState
               ),
               const SizedBox(height: 16),
 
-              // Route
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -421,7 +412,6 @@ class _DriverInstitutionSearchScreenState
 
               const SizedBox(height: 12),
 
-              // Dropoff Times
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -498,7 +488,6 @@ class _DriverInstitutionSearchScreenState
       LatLng location,
       String placeId,
       ) async {
-    // Show loading
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -510,7 +499,6 @@ class _DriverInstitutionSearchScreenState
     try {
       final institutionService = InstitutionService();
 
-      // Create institution ID from place ID
       final institutionId = placeId.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_');
 
       await institutionService.registerAtInstitution(
@@ -520,12 +508,12 @@ class _DriverInstitutionSearchScreenState
         institutionLongitude: location.longitude,
         placeId: placeId,
         route: _selectedRoute,
-        pickupTimes: _pickupTimes,    // NEW
-        dropoffTimes: _dropoffTimes,  // NEW
+        pickupTimes: _pickupTimes,
+        dropoffTimes: _dropoffTimes,
       );
 
-      Navigator.pop(context); // Close loading
-      Navigator.pop(context); // Close search screen
+      Navigator.pop(context);
+      Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -534,7 +522,7 @@ class _DriverInstitutionSearchScreenState
         ),
       );
     } catch (e) {
-      Navigator.pop(context); // Close loading
+      Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

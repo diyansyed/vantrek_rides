@@ -6,10 +6,10 @@ class Rating {
   final String userName;
   final String driverId;
   final String driverName;
-  final double rating; // 1-5 stars
-  final String? review; // Optional text review
+  final double rating;
+  final String? review;
   final DateTime createdAt;
-  final String? rideId; // Optional: link to specific ride
+  final String? rideId;
 
   Rating({
     required this.ratingId,

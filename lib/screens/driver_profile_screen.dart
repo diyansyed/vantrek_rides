@@ -45,7 +45,6 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
     }
   }
 
-  // NEW: Edit Personal Information Dialog
   Future<void> _editPersonalInfo() async {
     final currentUser = _auth.currentUser;
     if (currentUser == null) return;
@@ -138,7 +137,6 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
     }
   }
 
-  // NEW: Update Personal Info in Firestore
   Future<void> _updatePersonalInfo({
     required String name,
     required String phone,
@@ -203,7 +201,6 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
     }
   }
 
-  // NEW: Edit Vehicle Information Dialog
   Future<void> _editVehicleInfo() async {
     final currentUser = _auth.currentUser;
     if (currentUser == null) return;
@@ -327,7 +324,7 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
-      print('✅ Vehicle info updated successfully');
+      print(' Vehicle info updated successfully');
       print('═══════════════════════════════════════');
 
       await _loadDriverProfile();
@@ -494,13 +491,11 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
             ),
           ),
 
-          // Profile Content
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // Online Status Card
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -569,7 +564,6 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
 
                   const SizedBox(height: 16),
 
-                  // Personal Information Card
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -615,7 +609,6 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
 
                   const SizedBox(height: 16),
 
-                  // Vehicle Information Card
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -659,7 +652,6 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
 
                   const SizedBox(height: 16),
 
-                  // Statistics Card
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -706,7 +698,6 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
 
                   const SizedBox(height: 24),
 
-                  // Logout Button
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(

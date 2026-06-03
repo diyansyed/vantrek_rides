@@ -28,7 +28,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    // Mark messages as read when opening chat
     _chatService.markMessagesAsRead(
       chatId: widget.chatId,
       isDriver: widget.isDriver,
@@ -54,7 +53,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
     _messageController.clear();
 
-    // Scroll to bottom after sending
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -172,7 +170,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
 
-          // Message Input
           _buildMessageInput(),
         ],
       ),
@@ -390,11 +387,11 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           TextButton(
             onPressed: () async {
-              Navigator.pop(context); // Close dialog
+              Navigator.pop(context);
 
               try {
                 await _chatService.deleteChat(widget.chatId);
-                Navigator.pop(context); // Close chat screen
+                Navigator.pop(context);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -435,16 +432,12 @@ class _ChatScreenState extends State<ChatScreen> {
     final difference = now.difference(dateTime);
 
     if (difference.inDays == 0) {
-      // Today - show time
       return DateFormat('h:mm a').format(dateTime);
     } else if (difference.inDays == 1) {
-      // Yesterday
       return 'Yesterday ${DateFormat('h:mm a').format(dateTime)}';
     } else if (difference.inDays < 7) {
-      // This week - show day and time
       return '${DateFormat('EEEE h:mm a').format(dateTime)}';
     } else {
-      // Older - show full date and time
       return DateFormat('MMM d, h:mm a').format(dateTime);
     }
   }

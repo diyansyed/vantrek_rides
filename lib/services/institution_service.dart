@@ -106,7 +106,7 @@ class InstitutionService {
       print('✅ Institution already exists');
     }
 
-    // Add driver to institution's drivers subcollection
+
     final driverInfo = {
       'driverId': user.uid,
       'name': driverName,
@@ -126,7 +126,6 @@ class InstitutionService {
     print('✅ Driver added to institution drivers collection');
     print('   Path: institutions/$institutionId/drivers/${user.uid}');
 
-    // Add institution to driver's registered institutions
     await _firestore
         .collection('drivers')
         .doc(user.uid)
@@ -146,7 +145,6 @@ class InstitutionService {
     print('═══════════════════════════════════════');
   }
 
-  // Update driver's route at an institution
   Future<void> updateRouteAtInstitution({
     required String institutionId,
     required List<String> route,
@@ -154,7 +152,6 @@ class InstitutionService {
     final user = _auth.currentUser;
     if (user == null) throw Exception('No user logged in');
 
-    // Update route in institution's drivers subcollection
     await _firestore
         .collection('institutions')
         .doc(institutionId)
@@ -162,7 +159,6 @@ class InstitutionService {
         .doc(user.uid)
         .update({'route': route});
 
-    // Update route in driver's registered institutions
     await _firestore
         .collection('drivers')
         .doc(user.uid)
@@ -171,7 +167,6 @@ class InstitutionService {
         .update({'route': route});
   }
 
-  // Update driver's pickup times at an institution
   Future<void> updatePickupTimesAtInstitution({
     required String institutionId,
     required List<String> pickupTimes,
@@ -180,7 +175,6 @@ class InstitutionService {
     final user = _auth.currentUser;
     if (user == null) throw Exception('No user logged in');
 
-    // Update times in institution's drivers subcollection
     await _firestore
         .collection('institutions')
         .doc(institutionId)
@@ -191,7 +185,6 @@ class InstitutionService {
       'dropoffTimes': dropoffTimes,
     });
 
-    // Update times in driver's registered institutions
     await _firestore
         .collection('drivers')
         .doc(user.uid)
@@ -203,7 +196,6 @@ class InstitutionService {
     });
   }
 
-  // Get drivers at an institution
   Future<List<InstitutionDriver>> getDriversAtInstitution(
       String institutionId) async {
     print('═══════════════════════════════════════');
@@ -229,7 +221,6 @@ class InstitutionService {
         .toList();
   }
 
-  // Get driver's registered institutions
   Stream<List<Map<String, dynamic>>> getDriverRegisteredInstitutions() {
     final user = _auth.currentUser;
     if (user == null) return Stream.value([]);
@@ -251,7 +242,6 @@ class InstitutionService {
     });
   }
 
-  // Unregister from institution
   Future<void> unregisterFromInstitution(String institutionId) async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('No user logged in');
@@ -264,7 +254,6 @@ class InstitutionService {
         .doc(user.uid)
         .delete();
 
-    // Remove from driver's registered institutions
     await _firestore
         .collection('drivers')
         .doc(user.uid)
@@ -273,7 +262,6 @@ class InstitutionService {
         .delete();
   }
 
-  // Update driver's online status at institution
   Future<void> updateOnlineStatus({
     required String institutionId,
     required bool isOnline,
@@ -289,7 +277,6 @@ class InstitutionService {
         .update({'isOnline': isOnline});
   }
 
-  // Get institution details
   Future<Map<String, dynamic>?> getInstitutionDetails(
       String institutionId) async {
     final doc =
@@ -303,7 +290,6 @@ class InstitutionService {
     };
   }
 
-  // Search institutions by name
   Future<List<Map<String, dynamic>>> searchInstitutions(String query) async {
     if (query.isEmpty) return [];
 
@@ -322,7 +308,6 @@ class InstitutionService {
     }).toList();
   }
 
-  // Check if driver is registered at institution
   Future<bool> isRegisteredAtInstitution(String institutionId) async {
     final user = _auth.currentUser;
     if (user == null) return false;
@@ -337,7 +322,6 @@ class InstitutionService {
     return doc.exists;
   }
 
-  // Get driver count at institution
   Future<int> getDriverCountAtInstitution(String institutionId) async {
     final snapshot = await _firestore
         .collection('institutions')

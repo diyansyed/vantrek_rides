@@ -39,7 +39,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   Future<void> _handleSignUp() async {
     if (_formKey.currentState!.validate()) {
-      // Always sign up as user
       await ref.read(authControllerProvider.notifier).signUpWithEmailPassword(
         email: _emailController.text,
         password: _passwordController.text,
@@ -61,7 +60,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Listen to auth state changes
     ref.listen<AuthState>(authControllerProvider, (previous, next) {
       if (next.error != null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -128,27 +126,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Name Field
                   _buildNameField(),
                   const SizedBox(height: 16),
 
-                  // Email Field
                   _buildEmailField(),
                   const SizedBox(height: 16),
 
-                  // Password Field
                   _buildPasswordField(),
                   const SizedBox(height: 16),
 
-                  // Confirm Password Field
                   _buildConfirmPasswordField(),
                   const SizedBox(height: 32),
 
-                  // Sign Up Button
                   _buildSignUpButton(authState.isLoading),
                   const SizedBox(height: 24),
 
-                  // Already have account
                   _buildSignInLink(),
                 ],
               ),

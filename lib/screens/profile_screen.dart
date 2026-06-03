@@ -47,7 +47,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  // NEW: Edit Profile Dialog
+
   Future<void> _showEditProfileDialog() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
@@ -127,7 +127,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  // NEW: Update Profile in Firestore
   Future<void> _updateProfile({
     required String name,
     required String phone,
@@ -136,7 +135,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
-    // Show loading
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -153,7 +151,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       print('Phone: $phone');
       print('CNIC: $cnic');
 
-      // Update Firestore
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -167,7 +164,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       print('✅ Profile updated successfully');
       print('═══════════════════════════════════════');
 
-      // Reload user data
       await _loadUserData();
 
       if (mounted) Navigator.pop(context); // Close loading
@@ -319,7 +315,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with Edit Button
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 12, 20),
             child: Row(
@@ -428,7 +423,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             title: const Text('Ride History'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
-              // TODO: Navigate to ride history
             },
           ),
           ListTile(

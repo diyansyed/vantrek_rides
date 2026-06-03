@@ -22,7 +22,6 @@ class _SearchInstitutionScreenState
   Set<Marker> _markers = {};
   bool _showSuggestions = false;
 
-  // Pickup Location State
   LatLng? _pickupLocation;
   String _pickupAddress = 'Getting current location...';
   bool _isLoadingLocation = true;
@@ -32,7 +31,6 @@ class _SearchInstitutionScreenState
   bool _isPickupFocused = false;
   List<AutocompleteResult> _pickupSuggestions = [];
 
-  // Islamabad initial position
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(33.6844, 73.0479), // Islamabad
     zoom: 12,
@@ -59,7 +57,6 @@ class _SearchInstitutionScreenState
     });
 
     try {
-      // Check and request permission
       LocationPermission permission = await Geolocator.checkPermission();
 
       if (permission == LocationPermission.denied) {
@@ -75,7 +72,6 @@ class _SearchInstitutionScreenState
 
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
-        // Get current position with timeout
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
         ).timeout(
@@ -85,7 +81,6 @@ class _SearchInstitutionScreenState
           },
         );
 
-        // Debug: Print the coordinates
         print('📍 Location detected: ${position.latitude}, ${position.longitude}');
 
         setState(() {
@@ -93,7 +88,6 @@ class _SearchInstitutionScreenState
           _useCurrentLocation = true;
         });
 
-        // Animate camera to current location with good zoom
         _mapController?.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
@@ -103,7 +97,6 @@ class _SearchInstitutionScreenState
           ),
         );
 
-        // Get address
         await _getAddressFromLatLng(_pickupLocation!);
       }
     } catch (e) {
@@ -161,7 +154,6 @@ class _SearchInstitutionScreenState
   }
 
   void _onMapTap(LatLng location) {
-    // Only allow changing location if not using current location
     if (!_useCurrentLocation) {
       setState(() {
         _pickupLocation = location;
@@ -178,12 +170,10 @@ class _SearchInstitutionScreenState
     return Scaffold(
       body: Stack(
         children: [
-          // Google Map
           GoogleMap(
             initialCameraPosition: _initialPosition,
             markers: {
               ..._markers,
-              // Add pickup location marker
               if (_pickupLocation != null)
                 Marker(
                   markerId: const MarkerId('pickup'),
@@ -203,8 +193,6 @@ class _SearchInstitutionScreenState
             },
             onMapCreated: (controller) {
               _mapController = controller;
-              // Don't load nearby institutions automatically
-              // User needs to search for them
             },
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
@@ -219,7 +207,6 @@ class _SearchInstitutionScreenState
             },
           ),
 
-          // Pickup Location Card (Top)
           Positioned(
             top: 0,
             left: 0,
@@ -235,12 +222,11 @@ class _SearchInstitutionScreenState
             ),
           ),
 
-          // Search Results Card
           if (searchResults.hasValue &&
               searchResults.value!.isNotEmpty &&
               !_showSuggestions &&
               !_isPickupFocused &&
-              _searchController.text.isNotEmpty)  // Only show if user has typed
+              _searchController.text.isNotEmpty)
             Positioned(
               bottom: 0,
               left: 0,
@@ -248,7 +234,6 @@ class _SearchInstitutionScreenState
               child: _buildSearchResultsCard(searchResults.value!),
             ),
 
-          // My Location Button
           Positioned(
             bottom: 100,
             right: 16,
@@ -260,7 +245,6 @@ class _SearchInstitutionScreenState
             ),
           ),
 
-          // Loading Indicator
           if (searchResults.isLoading)
             const Positioned(
               top: 200,
@@ -304,7 +288,6 @@ class _SearchInstitutionScreenState
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Search Input
           Row(
             children: [
               const SizedBox(width: 16),
@@ -382,7 +365,6 @@ class _SearchInstitutionScreenState
             ],
           ),
 
-          // Autocomplete Suggestions
           if (_showPickupSuggestions && _pickupSuggestions.isNotEmpty)
             Container(
               constraints: const BoxConstraints(maxHeight: 200),
@@ -427,7 +409,6 @@ class _SearchInstitutionScreenState
                       });
                       FocusScope.of(context).unfocus();
 
-                      // Get place details
                       final placesService = ref.read(placesServiceProvider);
                       final details = await placesService
                           .getPlaceDetails(suggestion.placeId);
@@ -438,7 +419,6 @@ class _SearchInstitutionScreenState
                           _pickupAddress = details.name;
                         });
 
-                        // Animate to location
                         _mapController?.animateCamera(
                           CameraUpdate.newCameraPosition(
                             CameraPosition(
@@ -540,7 +520,6 @@ class _SearchInstitutionScreenState
             ],
           ),
 
-          // Autocomplete Suggestions
           if (_showSuggestions && suggestions.hasValue)
             suggestions.when(
               data: (suggestionsList) {
@@ -595,7 +574,6 @@ class _SearchInstitutionScreenState
                           });
                           FocusScope.of(context).unfocus();
 
-                          // Get place details and search
                           final placesService = ref.read(placesServiceProvider);
                           final details = await placesService
                               .getPlaceDetails(suggestion.placeId);
@@ -739,7 +717,6 @@ class _SearchInstitutionScreenState
         ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         onTap: () {
-          // Check if pickup location is selected
           if (_pickupLocation == null) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -750,7 +727,6 @@ class _SearchInstitutionScreenState
             return;
           }
 
-          // Generate institution ID — must match driver registration logic exactly
           final institutionId = place.placeId.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_');
 
           Navigator.push(
@@ -784,7 +760,6 @@ class _SearchInstitutionScreenState
   }
 
   void _showPlaceOnMap(PlaceResult place) {
-    // Clear and add new marker
     setState(() {
       _markers = {
         Marker(
@@ -799,7 +774,6 @@ class _SearchInstitutionScreenState
       };
     });
 
-    // Animate camera to location
     _mapController?.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -809,7 +783,6 @@ class _SearchInstitutionScreenState
       ),
     );
 
-    // Update search results
     ref.read(placesSearchControllerProvider.notifier).state =
         AsyncValue.data([place]);
   }

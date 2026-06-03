@@ -242,7 +242,6 @@ class _RegisteredInstitutionsScreenState
             const Divider(height: 1),
             const SizedBox(height: 16),
 
-            // Route Display
             if (route.isNotEmpty)
               Container(
                 padding: const EdgeInsets.all(12),
@@ -305,7 +304,6 @@ class _RegisteredInstitutionsScreenState
 
             const SizedBox(height: 12),
 
-            // Pickup & Dropoff Times Display
             if (pickupTimes.isNotEmpty || dropoffTimes.isNotEmpty)
               Container(
                 padding: const EdgeInsets.all(12),
@@ -397,7 +395,6 @@ class _RegisteredInstitutionsScreenState
 
             const SizedBox(height: 16),
 
-            // Action Buttons
             Row(
               children: [
                 Expanded(
@@ -509,7 +506,6 @@ class _RegisteredInstitutionsScreenState
 
     if (times == null) return;
 
-    // Show loading
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -565,7 +561,6 @@ class _RegisteredInstitutionsScreenState
       return;
     }
 
-    // Show loading
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -580,7 +575,7 @@ class _RegisteredInstitutionsScreenState
         route: newRoute,
       );
 
-      Navigator.pop(context); // Close loading
+      Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -589,7 +584,7 @@ class _RegisteredInstitutionsScreenState
         ),
       );
     } catch (e) {
-      Navigator.pop(context); // Close loading
+      Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -651,7 +646,7 @@ class _RegisteredInstitutionsScreenState
     try {
       await _institutionService.unregisterFromInstitution(institutionId);
 
-      Navigator.pop(context); // Close loading
+      Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -660,7 +655,7 @@ class _RegisteredInstitutionsScreenState
         ),
       );
     } catch (e) {
-      Navigator.pop(context); // Close loading
+      Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

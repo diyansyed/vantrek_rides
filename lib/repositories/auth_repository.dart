@@ -4,34 +4,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
 
-// Provider for FirebaseAuth instance
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
 
-// Provider for Firestore instance
 final firestoreProvider = Provider<FirebaseFirestore>((ref) {
   return FirebaseFirestore.instance;
 });
 
-// Provider for GoogleSignIn instance
 final googleSignInProvider = Provider<GoogleSignIn>((ref) {
   return GoogleSignIn(
     scopes: ['email'],
   );
 });
 
-// Auth state changes stream provider
 final authStateChangesProvider = StreamProvider<User?>((ref) {
   return ref.watch(firebaseAuthProvider).authStateChanges();
 });
 
-// Current user provider
 final currentUserProvider = Provider<User?>((ref) {
   return ref.watch(firebaseAuthProvider).currentUser;
 });
 
-// Auth Repository Provider
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
     auth: ref.watch(firebaseAuthProvider),
@@ -53,13 +47,10 @@ class AuthRepository {
         _firestore = firestore,
         _googleSignIn = googleSignIn;
 
-  // Get current user
   User? get currentUser => _auth.currentUser;
 
-  // Auth state changes
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  // Sign in with email and password
   Future<AppUser> signInWithEmailPassword({
     required String email,
     required String password,
@@ -75,7 +66,6 @@ class AuthRepository {
         throw 'Sign in failed. Please try again.';
       }
 
-      // Get user data from Firestore
       final userDoc = await _firestore
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -87,7 +77,6 @@ class AuthRepository {
 
       final appUser = AppUser.fromMap(userDoc.data()!);
 
-      // Verify user type matches
       if (appUser.userType != userType) {
         await _auth.signOut();
         throw 'Please sign in with the correct account type (${userType.name}).';
@@ -101,7 +90,6 @@ class AuthRepository {
     }
   }
 
-  // Sign up with email and password
   Future<AppUser> signUpWithEmailPassword({
     required String email,
     required String password,
@@ -118,12 +106,10 @@ class AuthRepository {
         throw 'Sign up failed. Please try again.';
       }
 
-      // Update display name if provided
       if (displayName != null && displayName.isNotEmpty) {
         await userCredential.user!.updateDisplayName(displayName);
       }
 
-      // Create user document in Firestore
       final appUser = AppUser(
         uid: userCredential.user!.uid,
         email: email.trim(),
@@ -146,39 +132,32 @@ class AuthRepository {
     }
   }
 
-  // Sign in with Google
   Future<AppUser> signInWithGoogle({required UserType userType}) async {
     try {
-      // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
         throw 'Google sign-in was cancelled.';
       }
 
-      // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
       await googleUser.authentication;
 
-      // Check if we have the necessary tokens
       if (googleAuth.accessToken == null && googleAuth.idToken == null) {
         throw 'Failed to get authentication tokens from Google.';
       }
 
-      // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Sign in to Firebase with the Google credential
       final userCredential = await _auth.signInWithCredential(credential);
 
       if (userCredential.user == null) {
         throw 'Google sign-in failed. Please try again.';
       }
 
-      // Check if user document exists
       final userDoc = await _firestore
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -187,17 +166,14 @@ class AuthRepository {
       AppUser appUser;
 
       if (userDoc.exists) {
-        // Existing user
         appUser = AppUser.fromMap(userDoc.data()!);
 
-        // Verify user type matches
         if (appUser.userType != userType) {
           await _auth.signOut();
           await _googleSignIn.signOut();
           throw 'Please sign in with the correct account type (${userType.name}).';
         }
       } else {
-        // New user - create document
         appUser = AppUser(
           uid: userCredential.user!.uid,
           email: userCredential.user!.email!,
@@ -221,7 +197,6 @@ class AuthRepository {
     }
   }
 
-  // Sign out
   Future<void> signOut() async {
     try {
       await Future.wait([
@@ -233,7 +208,6 @@ class AuthRepository {
     }
   }
 
-  // Send password reset email
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email.trim());
@@ -242,7 +216,6 @@ class AuthRepository {
     }
   }
 
-  // Get user data from Firestore
   Future<AppUser?> getUserData(String uid) async {
     try {
       final doc = await _firestore.collection('users').doc(uid).get();
@@ -264,7 +237,6 @@ class AuthRepository {
     }
   }
 
-  // Handle Firebase Auth exceptions
   String _handleAuthException(FirebaseAuthException e) {
     switch (e.code) {
       case 'user-not-found':

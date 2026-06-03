@@ -50,7 +50,6 @@ class DriverSubscriptionScreen extends ConsumerWidget {
               _buildBenefitsCard(),
               const SizedBox(height: 24),
 
-              // Pricing Plans
               const Text(
                 'Choose Your Plan',
                 style: TextStyle(
@@ -90,7 +89,6 @@ class DriverSubscriptionScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
 
-              // Payment History
               const Text(
                 'Payment History',
                 style: TextStyle(

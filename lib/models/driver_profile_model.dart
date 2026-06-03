@@ -25,19 +25,17 @@ class DriverProfile {
   final double rating;
   final int totalRides;
   final bool isApproved;
-  final bool isOnline; // Shares location with subscribers when true
+  final bool isOnline;
 
-  // Subscription fields
+
   final SubscriptionStatus subscriptionStatus;
   final DateTime? subscriptionStartDate;
   final DateTime? subscriptionEndDate;
   final double monthlyFee;
   final bool autoRenew;
 
-  // Subscribers (users who pay to see this driver's location)
   final int subscriberCount;
 
-  // Earnings
   final double todayEarnings;
   final double weekEarnings;
   final double monthEarnings;
@@ -54,12 +52,12 @@ class DriverProfile {
     required this.registeredAt,
     this.rating = 0.0,
     this.totalRides = 0,
-    this.isApproved = true, // Auto-approved for now
+    this.isApproved = true,
     this.isOnline = false,
     this.subscriptionStatus = SubscriptionStatus.pending,
     this.subscriptionStartDate,
     this.subscriptionEndDate,
-    this.monthlyFee = 1500.0, // PKR 1500/month default
+    this.monthlyFee = 1500.0,
     this.autoRenew = false,
     this.subscriberCount = 0,
     this.todayEarnings = 0.0,
@@ -68,21 +66,19 @@ class DriverProfile {
     this.totalEarnings = 0.0,
   });
 
-  // Check if subscription is active
   bool get isSubscriptionActive {
     if (subscriptionStatus != SubscriptionStatus.active) return false;
     if (subscriptionEndDate == null) return false;
     return DateTime.now().isBefore(subscriptionEndDate!);
   }
 
-  // Days remaining in subscription
+
   int get daysRemaining {
     if (subscriptionEndDate == null) return 0;
     final difference = subscriptionEndDate!.difference(DateTime.now());
     return difference.inDays;
   }
 
-  // Vehicle type display name
   String get vehicleTypeDisplay {
     switch (vehicleType) {
       case VehicleType.car:
@@ -98,7 +94,6 @@ class DriverProfile {
     }
   }
 
-  // Convert to Firestore
   Map<String, dynamic> toMap() {
     return {
       'driverId': driverId,
@@ -126,7 +121,6 @@ class DriverProfile {
     };
   }
 
-  // Create from Firestore
   factory DriverProfile.fromMap(Map<String, dynamic> map) {
     return DriverProfile(
       driverId: map['driverId'] ?? '',
@@ -164,7 +158,6 @@ class DriverProfile {
     );
   }
 
-  // Copy with method for updates
   DriverProfile copyWith({
     String? driverId,
     VehicleType? vehicleType,
