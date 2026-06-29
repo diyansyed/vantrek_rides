@@ -1,5 +1,5 @@
 # Vantrek Rides
-[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/diyansyed/vantrek_rides)
+
 
 Vantrek Rides is a Flutter-based mobile application designed to connect users with van and shuttle drivers for their daily commute, with a focus on transportation for educational institutions. The platform facilitates searching for drivers, managing subscriptions, live vehicle tracking, and in-app communication to provide a streamlined and reliable transportation solution.
 
