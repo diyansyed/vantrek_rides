@@ -1,14 +1,14 @@
 <div align="center">
-  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=260&color=0:0f0c29,45:302b63,100:8e2de2&text=Diyan%20Syed&fontColor=ffffff&fontSize=64&fontAlignY=38&desc=Software%20Engineer%20%7C%20AI%2FML%20%7C%20Full-Stack%20Product%20Builder&descAlignY=58&animation=fadeIn" alt="Header banner" />
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=260&color=0:0f0c29,45:302b63,100:8e2de2&text=Diyan%20Syed&fontColor=ffffff&fontSize=64&fontAlignY=38&desc=Software%20Engineer%20%7C%20DevOps%20%7C%20Flutter%20App%20Developer&descAlignY=58&animation=fadeIn" alt="Header banner" />
 </div>
 
 <div align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Inter&weight=700&size=28&duration=2800&pause=800&color=A855F7&center=true&vCenter=true&width=900&lines=Engineering+Reliable+Mobile+and+Cloud+Products;Building+AI-Ready+Full-Stack+Systems;Designing+Clean+User-Centered+Software;Turning+Ideas+into+Production-Grade+Apps" alt="Typing animation" />
+  <img src="https://readme-typing-svg.demolab.com?font=Inter&weight=700&size=28&duration=2800&pause=800&color=A855F7&center=true&vCenter=true&width=900&lines=Building+Production-Ready+Flutter+Applications;Engineering+Reliable+Mobile+and+Cloud+Products;Designing+DevOps-Ready+Delivery+Pipelines;Turning+Ideas+into+Scalable+App+Experiences" alt="Typing animation" />
 </div>
 
 <div align="center">
   <img src="https://img.shields.io/badge/Software%20Engineering-0F172A?style=flat-square&logo=codecrafters&logoColor=white" alt="Software engineering badge" />
-  <img src="https://img.shields.io/badge/AI%2FML-312E81?style=flat-square&logo=openai&logoColor=white" alt="AI ML badge" />
+  <img src="https://img.shields.io/badge/DevOps-312E81?style=flat-square&logo=githubactions&logoColor=white" alt="DevOps badge" />
   <img src="https://img.shields.io/badge/Full--Stack%20Development-4C1D95?style=flat-square&logo=stackshare&logoColor=white" alt="Full stack badge" />
   <img src="https://img.shields.io/badge/Product%20Engineering-1E1B4B?style=flat-square&logo=figma&logoColor=white" alt="Product engineering badge" />
   <br />
@@ -21,10 +21,10 @@
   <a href="https://diyansyed.github.io">
     <img src="https://img.shields.io/badge/Portfolio-111827?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio" />
   </a>
-  <a href="https://www.linkedin.com/in/diyansyed">
+  <a href="https://www.linkedin.com/in/diyan-ehsan-syed-a09785255?utm_source=share_via&utm_content=profile&utm_medium=member_ios">
     <img src="https://img.shields.io/badge/LinkedIn-312E81?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
-  <a href="mailto:diyansyed@gmail.com">
+  <a href="mailto:diyansyedd@gmail.com">
     <img src="https://img.shields.io/badge/Email-4C1D95?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
   </a>
   <a href="https://github.com/diyansyed">
@@ -44,18 +44,18 @@
 
 ## About
 
-I am a software engineer focused on building polished, scalable, and production-ready digital products. My work sits at the intersection of full-stack development, mobile engineering, AI-assisted systems, cloud infrastructure, and product thinking.
+I am a software engineer focused on building polished, scalable, and production-ready digital products. My work sits at the intersection of full-stack development, Flutter app engineering, DevOps-ready delivery, cloud infrastructure, and product thinking.
 
 I care about engineering that is clean under the hood and intuitive at the surface. That means readable architecture, reliable data flows, secure integrations, fast user experiences, and product decisions that make software easier to trust.
 
-My strongest interests include AI/ML-enabled applications, Flutter mobile development, Firebase-backed systems, cloud-native product architecture, API design, automation, and practical engineering workflows that move ideas from prototype to usable product.
+My strongest interests include Flutter mobile development, Firebase-backed systems, DevOps workflows, cloud-native product architecture, API design, automation, and practical engineering workflows that move ideas from prototype to usable product.
 
 **Open To**
 
 | Area | Focus |
 | --- | --- |
 | Software Engineering | Full-stack, mobile, backend, and product engineering roles |
-| AI/ML Engineering | Applied AI features, model integration, intelligent workflows |
+| DevOps Engineering | CI/CD, release workflows, deployment automation, and cloud tooling |
 | Open Source | Flutter, Firebase, developer tooling, and education-focused products |
 | Collaboration | Startup products, research prototypes, and production app development |
 
@@ -89,16 +89,16 @@ My strongest interests include AI/ML-enabled applications, Flutter mobile develo
 
 ---
 
-## AI / ML Expertise
+## DevOps / Flutter Expertise
 
 | Domain | Proficiency | Details |
 | --- | --- | --- |
-| Applied AI Product Design | Advanced | Translating AI capabilities into useful product features, workflows, and decision systems |
-| Machine Learning Foundations | Intermediate | Data preprocessing, model evaluation, supervised learning, classification, and regression workflows |
-| LLM Integration | Intermediate | Prompt design, structured outputs, AI-assisted automation, and API-based model integration |
-| Recommendation Systems | Intermediate | Matching, ranking, filtering, and user-centered discovery flows |
-| Computer Vision | Foundational | Image classification concepts, visual feature extraction, and app-level AI use cases |
-| AI Engineering Practices | Advanced | Evaluation mindset, secure API usage, UX constraints, cost awareness, and reliability planning |
+| Flutter App Development | Advanced | Building clean, responsive, cross-platform mobile applications with reusable UI and feature-based architecture |
+| Firebase Integration | Advanced | Authentication, Cloud Firestore, Realtime Database, platform configuration, and secure app data flows |
+| DevOps Workflows | Intermediate | CI/CD planning, release hygiene, build validation, environment setup, and deployment-ready repository structure |
+| Cloud & Backend Tooling | Intermediate | API integration, cloud-backed services, database modeling, and reliable backend communication patterns |
+| Mobile Performance | Intermediate | Stream handling, app navigation, state scope, permission-aware services, and user experience optimization |
+| Engineering Practices | Advanced | Maintainable architecture, documentation, security awareness, testing mindset, and production readiness |
 
 ---
 
@@ -124,19 +124,19 @@ My strongest interests include AI/ML-enabled applications, Flutter mobile develo
 </details>
 
 <details>
-  <summary><strong>AI-Ready Engineering Portfolio</strong></summary>
+  <summary><strong>DevOps-Ready Flutter Engineering Portfolio</strong></summary>
 
   <br />
 
-  A continuously evolving portfolio of full-stack and AI-assisted engineering work, focused on shipping usable applications with clean architecture, strong documentation, and recruiter-friendly presentation.
+  A continuously evolving portfolio of full-stack, DevOps-ready, and Flutter-focused engineering work, focused on shipping usable applications with clean architecture, strong documentation, and recruiter-friendly presentation.
 
   | Category | Details |
   | --- | --- |
   | Stack | Flutter, Firebase, JavaScript, TypeScript, Python, cloud tooling, GitHub workflows |
-  | Scale | Project-based engineering portfolio across mobile, backend, AI, and product design |
-  | Performance | Focus on responsive interfaces, lean data models, and maintainable project structure |
+  | Scale | Project-based engineering portfolio across mobile, backend, DevOps, and product design |
+  | Performance | Focus on responsive interfaces, lean data structures, and maintainable project structure |
   | Security | Emphasis on restricted keys, protected backend rules, and clean secret-management practices |
-  | Impact | Builds a public engineering footprint for software, AI, and product development opportunities |
+  | Impact | Builds a public engineering footprint for software, DevOps, Flutter, and product development opportunities |
   | Repository | [github.com/diyansyed](https://github.com/diyansyed) |
 
   The portfolio represents a product-minded approach to software engineering: practical apps, thoughtful documentation, credible architecture, and continuous improvement across the development lifecycle.
@@ -178,7 +178,7 @@ Building mobile and cloud-backed software products with a focus on real-world us
 | Mobile Engineering | Developed cross-platform Flutter structure across Android, iOS, web, desktop scaffolds, and reusable app modules |
 | Cloud Integration | Integrated Firebase Authentication, Firestore, Realtime Database, Google Maps, and Places APIs |
 | Product Documentation | Crafted premium GitHub documentation with recruiter-friendly positioning and clear technical storytelling |
-| Engineering Discipline | Maintained separated models, services, providers, repositories, controllers, screens, and widgets |
+| Engineering Discipline | Maintained separated data structures, services, providers, repositories, controllers, screens, and widgets |
 
 </div>
 
@@ -204,7 +204,7 @@ Building mobile and cloud-backed software products with a focus on real-world us
 
 <div align="left">
   <img src="https://img.shields.io/badge/NPTEL-Software%20Engineering-111827?style=for-the-badge&logo=bookstack&logoColor=A855F7" alt="NPTEL Software Engineering" />
-  <img src="https://img.shields.io/badge/NPTEL-Machine%20Learning-312E81?style=for-the-badge&logo=tensorflow&logoColor=white" alt="NPTEL Machine Learning" />
+  <img src="https://img.shields.io/badge/NPTEL-Cloud%20Computing-312E81?style=for-the-badge&logo=icloud&logoColor=white" alt="NPTEL Cloud Computing" />
 </div>
 
 **Cisco**
@@ -279,25 +279,25 @@ Building mobile and cloud-backed software products with a focus on real-world us
 ```yaml
 Learning:
   - Advanced Flutter architecture
-  - Applied AI and ML systems
+  - DevOps and CI/CD workflows
   - Cloud-native backend design
   - Production security practices
 
 Building:
   - Mobile-first products
   - Firebase-backed realtime applications
-  - AI-assisted developer and user workflows
+  - Flutter application development workflows
   - Recruiter-ready engineering portfolio projects
 
 Exploring:
-  - LLM-powered product features
-  - Recommendation and ranking systems
+  - Mobile release automation
+  - Cloud deployment patterns
   - Scalable backend patterns
   - Open source contribution workflows
 
 Open To:
   - Software engineering roles
-  - AI/ML engineering opportunities
+  - DevOps engineering opportunities
   - Full-stack product engineering
   - Open source collaboration
 ```
@@ -307,10 +307,10 @@ Open To:
 ## Connect
 
 <div align="center">
-  <a href="mailto:diyansyed@gmail.com">
+  <a href="mailto:diyansyedd@gmail.com">
     <img src="https://img.shields.io/badge/Gmail-111827?style=for-the-badge&logo=gmail&logoColor=EA4335" alt="Gmail" />
   </a>
-  <a href="https://www.linkedin.com/in/diyansyed">
+  <a href="https://www.linkedin.com/in/diyan-ehsan-syed-a09785255?utm_source=share_via&utm_content=profile&utm_medium=member_ios">
     <img src="https://img.shields.io/badge/LinkedIn-312E81?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
   <a href="https://github.com/diyansyed">
