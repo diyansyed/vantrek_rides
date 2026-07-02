@@ -1,332 +1,296 @@
 <div align="center">
-  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=260&color=0:0f0c29,45:302b63,100:8e2de2&text=Diyan%20Syed&fontColor=ffffff&fontSize=64&fontAlignY=38&desc=Software%20Engineer%20%7C%20DevOps%20%7C%20Flutter%20App%20Developer&descAlignY=58&animation=fadeIn" alt="Header banner" />
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=280&color=0:00B4D8,45:0077B6,100:023E8A&text=Vantrek%20Rides&fontColor=ffffff&fontSize=72&fontAlignY=38&desc=Smart%20institution%20transport%20%7C%20Live%20tracking%20%7C%20Driver%20discovery&descAlignY=58&animation=fadeIn" alt="Vantrek Rides animated header" />
 </div>
 
 <div align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Inter&weight=700&size=28&duration=2800&pause=800&color=A855F7&center=true&vCenter=true&width=900&lines=Building+Production-Ready+Flutter+Applications;Engineering+Reliable+Mobile+and+Cloud+Products;Designing+DevOps-Ready+Delivery+Pipelines;Turning+Ideas+into+Scalable+App+Experiences" alt="Typing animation" />
+  <img src="logo.png" width="180" alt="Vantrek Rides logo" />
 </div>
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Software%20Engineering-0F172A?style=flat-square&logo=codecrafters&logoColor=white" alt="Software engineering badge" />
-  <img src="https://img.shields.io/badge/DevOps-312E81?style=flat-square&logo=githubactions&logoColor=white" alt="DevOps badge" />
-  <img src="https://img.shields.io/badge/Full--Stack%20Development-4C1D95?style=flat-square&logo=stackshare&logoColor=white" alt="Full stack badge" />
-  <img src="https://img.shields.io/badge/Product%20Engineering-1E1B4B?style=flat-square&logo=figma&logoColor=white" alt="Product engineering badge" />
-  <br />
-  <img src="https://img.shields.io/badge/Pakistan-111827?style=flat-square&logo=googlemaps&logoColor=A855F7" alt="Location badge" />
+  <img src="https://readme-typing-svg.demolab.com?font=Inter&weight=800&size=28&duration=2600&pause=700&color=00B4D8&center=true&vCenter=true&width=950&lines=Find+trusted+institution+drivers;Track+rides+live+on+the+map;Chat%2C+subscribe%2C+request%2C+and+rate;A+modern+Flutter+transport+experience" alt="Animated project tagline" />
 </div>
 
-<br />
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter" />
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=111827" alt="Firebase" />
+  <img src="https://img.shields.io/badge/Riverpod-00B4D8?style=for-the-badge&logo=dart&logoColor=white" alt="Riverpod" />
+  <img src="https://img.shields.io/badge/Google%20Maps-34A853?style=for-the-badge&logo=googlemaps&logoColor=white" alt="Google Maps" />
+  <img src="https://img.shields.io/badge/Realtime-023E8A?style=for-the-badge&logo=firestore&logoColor=white" alt="Realtime" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-111827?style=flat-square" alt="Platforms" />
+  <img src="https://img.shields.io/badge/Status-Active%20Flutter%20Project-00B4D8?style=flat-square" alt="Project status" />
+  <img src="https://img.shields.io/badge/App-Type%20Transport%20%26%20Commute-0077B6?style=flat-square" alt="App type" />
+</p>
+
+---
+
+## ✨ Project Snapshot
+
+**Vantrek Rides** is a Flutter-based smart commute platform built for institution-centered transportation. It helps passengers discover trusted van/shuttle drivers, subscribe to drivers, request rides, track live locations, chat in real time, and rate their ride experience.
+
+It is designed around a simple idea: make daily student and institution transport easier to find, easier to trust, and easier to follow.
 
 <div align="center">
-  <a href="https://diyansyed.github.io">
-    <img src="https://img.shields.io/badge/Portfolio-111827?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio" />
-  </a>
-  <a href="https://www.linkedin.com/in/diyan-ehsan-syed-a09785255?utm_source=share_via&utm_content=profile&utm_medium=member_ios">
-    <img src="https://img.shields.io/badge/LinkedIn-312E81?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-  </a>
-  <a href="mailto:diyansyedd@gmail.com">
-    <img src="https://img.shields.io/badge/Email-4C1D95?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
-  </a>
-  <a href="https://github.com/diyansyed">
-    <img src="https://img.shields.io/badge/GitHub-0F172A?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
-  </a>
-</div>
-
-<br />
-
-<div align="center">
-  <img src="https://komarev.com/ghpvc/?username=diyansyed&label=Profile%20Views&color=7c3aed&style=flat-square" alt="Profile views" />
-  <img src="https://img.shields.io/github/followers/diyansyed?label=Followers&style=flat-square&color=4f46e5&labelColor=111827" alt="Followers" />
-  <img src="https://img.shields.io/github/stars/diyansyed?affiliations=OWNER%2CCOLLABORATOR&label=Stars&style=flat-square&color=8b5cf6&labelColor=111827" alt="Stars" />
+  <table>
+    <tr>
+      <td align="center"><strong>Passenger Experience</strong></td>
+      <td align="center"><strong>Driver Experience</strong></td>
+    </tr>
+    <tr>
+      <td><img src="APP%20SCREENSHOT.jpeg" width="270" alt="Vantrek Rides passenger screenshot" /></td>
+      <td><img src="App%20screenshot%202.jpeg" width="270" alt="Vantrek Rides driver screenshot" /></td>
+    </tr>
+  </table>
 </div>
 
 ---
 
-## About
+## 🚀 What Vantrek Rides Does
 
-I am a software engineer focused on building polished, scalable, and production-ready digital products. My work sits at the intersection of full-stack development, Flutter app engineering, DevOps-ready delivery, cloud infrastructure, and product thinking.
-
-I care about engineering that is clean under the hood and intuitive at the surface. That means readable architecture, reliable data flows, secure integrations, fast user experiences, and product decisions that make software easier to trust.
-
-My strongest interests include Flutter mobile development, Firebase-backed systems, DevOps workflows, cloud-native product architecture, API design, automation, and practical engineering workflows that move ideas from prototype to usable product.
-
-**Open To**
-
-| Area | Focus |
-| --- | --- |
-| Software Engineering | Full-stack, mobile, backend, and product engineering roles |
-| DevOps Engineering | CI/CD, release workflows, deployment automation, and cloud tooling |
-| Open Source | Flutter, Firebase, developer tooling, and education-focused products |
-| Collaboration | Startup products, research prototypes, and production app development |
-
----
-
-## Tech Stack
-
-**Languages**
-
-<div align="center">
-  <img src="https://skillicons.dev/icons?i=dart,js,ts,python,java,cpp,cs,html,css&theme=dark" alt="Languages" />
-</div>
-
-**Frontend**
-
-<div align="center">
-  <img src="https://skillicons.dev/icons?i=flutter,react,nextjs,tailwind,materialui,figma&theme=dark" alt="Frontend tools" />
-</div>
-
-**Backend & Databases**
-
-<div align="center">
-  <img src="https://skillicons.dev/icons?i=firebase,nodejs,express,mongodb,mysql,postgres,redis,supabase&theme=dark" alt="Backend and databases" />
-</div>
-
-**Cloud, DevOps & Tooling**
-
-<div align="center">
-  <img src="https://skillicons.dev/icons?i=git,github,docker,aws,vercel,netlify,linux,vscode,androidstudio&theme=dark" alt="Cloud DevOps tooling" />
-</div>
+<table>
+  <tr>
+    <td><strong>🔎 Driver Discovery</strong></td>
+    <td>Search institutions and find available drivers connected to specific schools, colleges, or campuses.</td>
+  </tr>
+  <tr>
+    <td><strong>📍 Live Tracking</strong></td>
+    <td>Drivers can share their current location while passengers follow updates through map-powered tracking flows.</td>
+  </tr>
+  <tr>
+    <td><strong>💬 In-App Chat</strong></td>
+    <td>Passengers and drivers can create chat threads, send messages, and manage unread counts in Firebase.</td>
+  </tr>
+  <tr>
+    <td><strong>🧾 Subscriptions</strong></td>
+    <td>Passengers can subscribe to drivers for recurring commute relationships and easy access.</td>
+  </tr>
+  <tr>
+    <td><strong>🙋 Ride Requests</strong></td>
+    <td>Users can request rides while drivers manage passenger interest through dedicated driver screens.</td>
+  </tr>
+  <tr>
+    <td><strong>⭐ Ratings</strong></td>
+    <td>Passengers can rate drivers and leave feedback to improve trust and service quality.</td>
+  </tr>
+  <tr>
+    <td><strong>🚐 Driver Mode</strong></td>
+    <td>Approved drivers get a dashboard for subscribers, ride requests, ratings, profile details, and location sharing.</td>
+  </tr>
+</table>
 
 ---
 
-## DevOps / Flutter Expertise
+## 🧭 App Flow
 
-| Domain | Proficiency | Details |
-| --- | --- | --- |
-| Flutter App Development | Advanced | Building clean, responsive, cross-platform mobile applications with reusable UI and feature-based architecture |
-| Firebase Integration | Advanced | Authentication, Cloud Firestore, Realtime Database, platform configuration, and secure app data flows |
-| DevOps Workflows | Intermediate | CI/CD planning, release hygiene, build validation, environment setup, and deployment-ready repository structure |
-| Cloud & Backend Tooling | Intermediate | API integration, cloud-backed services, database modeling, and reliable backend communication patterns |
-| Mobile Performance | Intermediate | Stream handling, app navigation, state scope, permission-aware services, and user experience optimization |
-| Engineering Practices | Advanced | Maintainable architecture, documentation, security awareness, testing mindset, and production readiness |
-
----
-
-## Featured Projects
-
-<details open>
-  <summary><strong>Vantrek Rides</strong></summary>
-
-  <br />
-
-  A Flutter-based commute platform for institution-centered transportation. Vantrek Rides connects passengers with trusted van and shuttle drivers through driver discovery, subscriptions, ride requests, live tracking, in-app chat, and driver dashboards.
-
-  | Category | Details |
-  | --- | --- |
-  | Stack | Flutter, Dart, Riverpod, Firebase Auth, Cloud Firestore, Firebase Realtime Database, Google Maps, Google Places |
-  | Scale | Multi-role passenger and driver flows with institution, subscription, request, chat, rating, and location modules |
-  | Performance | Real-time location updates, efficient Firestore streams, state-scoped Riverpod providers, and focused mobile navigation |
-  | Security | Firebase authentication, role-aware driver flows, restricted production API-key guidance, and permission-aware location access |
-  | Impact | Improves student commute discovery, driver visibility, passenger communication, and live transport transparency |
-  | Repository | [github.com/diyansyed/vantrek_rides](https://github.com/diyansyed/vantrek_rides) |
-
-  Vantrek Rides demonstrates end-to-end product engineering: authentication, mobile UX, maps, live data, user-generated requests, driver operations, and Firebase-backed service boundaries. It is built as a practical, real-world system rather than a static demo.
-</details>
-
-<details>
-  <summary><strong>DevOps-Ready Flutter Engineering Portfolio</strong></summary>
-
-  <br />
-
-  A continuously evolving portfolio of full-stack, DevOps-ready, and Flutter-focused engineering work, focused on shipping usable applications with clean architecture, strong documentation, and recruiter-friendly presentation.
-
-  | Category | Details |
-  | --- | --- |
-  | Stack | Flutter, Firebase, JavaScript, TypeScript, Python, cloud tooling, GitHub workflows |
-  | Scale | Project-based engineering portfolio across mobile, backend, DevOps, and product design |
-  | Performance | Focus on responsive interfaces, lean data structures, and maintainable project structure |
-  | Security | Emphasis on restricted keys, protected backend rules, and clean secret-management practices |
-  | Impact | Builds a public engineering footprint for software, DevOps, Flutter, and product development opportunities |
-  | Repository | [github.com/diyansyed](https://github.com/diyansyed) |
-
-  The portfolio represents a product-minded approach to software engineering: practical apps, thoughtful documentation, credible architecture, and continuous improvement across the development lifecycle.
-</details>
-
----
-
-## Experience
-
-**Software Engineer / Product Engineer**  
-**Independent Engineering Work**  
-**2025 - Present**
-
-Building mobile and cloud-backed software products with a focus on real-world usability, scalable architecture, and polished developer presentation.
-
-- Designed and implemented Flutter application flows for authentication, maps, realtime data, chat, ratings, and dashboard experiences.
-- Integrated Firebase services including Authentication, Cloud Firestore, Realtime Database, and generated platform configuration.
-- Built role-aware passenger and driver experiences with clean feature separation and reusable services.
-- Worked with Google Maps, Places, geolocation, and route-related product flows.
-- Improved product documentation, visual presentation, and engineering communication for public repositories.
-
-<div align="left">
-  <img src="https://img.shields.io/badge/Flutter-111827?style=flat-square&logo=flutter&logoColor=60A5FA" alt="Flutter" />
-  <img src="https://img.shields.io/badge/Firebase-111827?style=flat-square&logo=firebase&logoColor=FBBF24" alt="Firebase" />
-  <img src="https://img.shields.io/badge/Riverpod-111827?style=flat-square&logo=dart&logoColor=A855F7" alt="Riverpod" />
-  <img src="https://img.shields.io/badge/Google%20Maps-111827?style=flat-square&logo=googlemaps&logoColor=60A5FA" alt="Google Maps" />
-  <img src="https://img.shields.io/badge/Product%20Engineering-111827?style=flat-square&logo=figma&logoColor=C084FC" alt="Product Engineering" />
-</div>
-
----
-
-## Achievements
-
-<div align="center">
-
-| Recognition | Details |
-| --- | --- |
-| Full-Stack Product Delivery | Built a multi-role Flutter and Firebase application with maps, chat, requests, subscriptions, and live location flows |
-| Mobile Engineering | Developed cross-platform Flutter structure across Android, iOS, web, desktop scaffolds, and reusable app modules |
-| Cloud Integration | Integrated Firebase Authentication, Firestore, Realtime Database, Google Maps, and Places APIs |
-| Product Documentation | Crafted premium GitHub documentation with recruiter-friendly positioning and clear technical storytelling |
-| Engineering Discipline | Maintained separated data structures, services, providers, repositories, controllers, screens, and widgets |
-
-</div>
-
----
-
-## Certifications
-
-**AWS**
-
-<div align="left">
-  <img src="https://img.shields.io/badge/AWS-Cloud%20Foundations-111827?style=for-the-badge&logo=amazonaws&logoColor=FF9900" alt="AWS Cloud Foundations" />
-  <img src="https://img.shields.io/badge/AWS-Solutions%20Architecture-312E81?style=for-the-badge&logo=amazonaws&logoColor=white" alt="AWS Solutions Architecture" />
-</div>
-
-**Oracle**
-
-<div align="left">
-  <img src="https://img.shields.io/badge/Oracle-Database%20Foundations-111827?style=for-the-badge&logo=oracle&logoColor=F80000" alt="Oracle Database Foundations" />
-  <img src="https://img.shields.io/badge/Oracle-Java%20Foundations-312E81?style=for-the-badge&logo=oracle&logoColor=white" alt="Oracle Java Foundations" />
-</div>
-
-**NPTEL**
-
-<div align="left">
-  <img src="https://img.shields.io/badge/NPTEL-Software%20Engineering-111827?style=for-the-badge&logo=bookstack&logoColor=A855F7" alt="NPTEL Software Engineering" />
-  <img src="https://img.shields.io/badge/NPTEL-Cloud%20Computing-312E81?style=for-the-badge&logo=icloud&logoColor=white" alt="NPTEL Cloud Computing" />
-</div>
-
-**Cisco**
-
-<div align="left">
-  <img src="https://img.shields.io/badge/Cisco-Networking%20Basics-111827?style=for-the-badge&logo=cisco&logoColor=60A5FA" alt="Cisco Networking Basics" />
-  <img src="https://img.shields.io/badge/Cisco-Cybersecurity%20Essentials-312E81?style=for-the-badge&logo=cisco&logoColor=white" alt="Cisco Cybersecurity Essentials" />
-</div>
-
----
-
-## Coding Profiles
-
-<div align="center">
-  <a href="https://leetcode.com/diyansyed">
-    <img src="https://img.shields.io/badge/LeetCode-111827?style=for-the-badge&logo=leetcode&logoColor=FFA116" alt="LeetCode" />
-  </a>
-  <a href="https://www.geeksforgeeks.org/user/diyansyed">
-    <img src="https://img.shields.io/badge/GeeksforGeeks-312E81?style=for-the-badge&logo=geeksforgeeks&logoColor=white" alt="GeeksforGeeks" />
-  </a>
-  <a href="https://www.hackerrank.com/diyansyed">
-    <img src="https://img.shields.io/badge/HackerRank-111827?style=for-the-badge&logo=hackerrank&logoColor=00EA64" alt="HackerRank" />
-  </a>
-  <a href="https://www.codechef.com/users/diyansyed">
-    <img src="https://img.shields.io/badge/CodeChef-312E81?style=for-the-badge&logo=codechef&logoColor=white" alt="CodeChef" />
-  </a>
-</div>
-
----
-
-## GitHub Analytics
-
-<div align="center">
-  <img width="49%" src="https://github-readme-stats.vercel.app/api?username=diyansyed&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0D1117&title_color=A855F7&icon_color=8B5CF6&text_color=E5E7EB" alt="GitHub stats" />
-  <img width="49%" src="https://streak-stats.demolab.com?user=diyansyed&theme=tokyonight&hide_border=true&background=0D1117&ring=A855F7&fire=8B5CF6&currStreakLabel=C084FC" alt="GitHub streak" />
-  <br />
-  <img width="54%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=diyansyed&layout=compact&theme=tokyonight&hide_border=true&bg_color=0D1117&title_color=A855F7&text_color=E5E7EB" alt="Top languages" />
-</div>
-
----
-
-## GitHub Trophies
-
-<div align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=diyansyed&theme=discord&no-frame=true&no-bg=true&margin-w=10&margin-h=10&column=6" alt="GitHub trophies" />
-</div>
-
----
-
-## Contribution Activity
-
-<div align="center">
-  <img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=diyansyed&bg_color=0D1117&color=C084FC&line=8B5CF6&point=60A5FA&area=true&hide_border=true" alt="Contribution activity graph" />
-</div>
-
----
-
-## Contribution Snake
-
-<div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/diyansyed/diyansyed/output/github-contribution-grid-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/diyansyed/diyansyed/output/github-contribution-grid-snake.svg" />
-    <img src="https://raw.githubusercontent.com/diyansyed/diyansyed/output/github-contribution-grid-snake-dark.svg" alt="Contribution snake animation" />
-  </picture>
-</div>
-
----
-
-## Current Focus
-
-```yaml
-Learning:
-  - Advanced Flutter architecture
-  - DevOps and CI/CD workflows
-  - Cloud-native backend design
-  - Production security practices
-
-Building:
-  - Mobile-first products
-  - Firebase-backed realtime applications
-  - Flutter application development workflows
-  - Recruiter-ready engineering portfolio projects
-
-Exploring:
-  - Mobile release automation
-  - Cloud deployment patterns
-  - Scalable backend patterns
-  - Open source contribution workflows
-
-Open To:
-  - Software engineering roles
-  - DevOps engineering opportunities
-  - Full-stack product engineering
-  - Open source collaboration
+```mermaid
+flowchart LR
+    A[Welcome] --> B[Sign In / Sign Up]
+    B --> C[Home]
+    C --> D[Search Institution]
+    D --> E[View Drivers]
+    E --> F[Driver Details]
+    F --> G[Subscribe / Request Ride]
+    F --> H[Start Chat]
+    C --> I[Live Tracking]
+    C --> J[Rate Driver]
+    C --> K[Driver Mode]
+    K --> L[Driver Dashboard]
+    L --> M[Subscribers]
+    L --> N[Ride Requests]
+    L --> O[Share Location]
 ```
 
 ---
 
-## Connect
+## 🛠️ Tech Stack
 
 <div align="center">
-  <a href="mailto:diyansyedd@gmail.com">
-    <img src="https://img.shields.io/badge/Gmail-111827?style=for-the-badge&logo=gmail&logoColor=EA4335" alt="Gmail" />
-  </a>
-  <a href="https://www.linkedin.com/in/diyan-ehsan-syed-a09785255?utm_source=share_via&utm_content=profile&utm_medium=member_ios">
-    <img src="https://img.shields.io/badge/LinkedIn-312E81?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-  </a>
-  <a href="https://github.com/diyansyed">
-    <img src="https://img.shields.io/badge/GitHub-111827?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
-  </a>
-  <a href="https://diyansyed.github.io">
-    <img src="https://img.shields.io/badge/Portfolio-4C1D95?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio" />
-  </a>
+  <img src="https://skillicons.dev/icons?i=flutter,dart,firebase,androidstudio,vscode,git,github&theme=dark" alt="Core technology icons" />
+</div>
+
+| Layer | Technology |
+| --- | --- |
+| App Framework | Flutter |
+| Language | Dart |
+| State Management | Flutter Riverpod |
+| Authentication | Firebase Auth, Google Sign-In |
+| Database | Cloud Firestore |
+| Realtime Data | Firebase Realtime Database, Firestore streams |
+| Maps & Places | Google Maps Flutter, Google Places, Geolocator, Geocoding |
+| Communication | Firebase-backed chat collections and message streams |
+| Platforms | Android, iOS, Web, Linux, macOS, Windows scaffolds |
+
+---
+
+## 📱 Core Screens
+
+| Passenger Side | Driver Side | Shared Flows |
+| --- | --- | --- |
+| Welcome screen | Become driver screen | Sign in / Sign up |
+| Home dashboard | Driver dashboard | Profile |
+| Institution search | Driver profile | Chat list |
+| Institution details | Driver subscribers | Chat room |
+| Driver details | Driver ride requests | Ratings |
+| Subscribed drivers | Driver live location map | Live tracking |
+| Rate driver | Driver ratings | Place details |
+
+---
+
+## 🧩 Project Structure
+
+```text
+lib/
+├── controllers/       # Auth controller and UI-facing control logic
+├── models/            # User, driver, institution, rating, chat, request models
+├── providers/         # Riverpod providers for app state and services
+├── repositories/      # Firebase auth repository
+├── screens/           # Passenger, driver, auth, chat, map, and profile screens
+├── services/          # Chat, location, institution, rating, request, subscription services
+├── utils/             # Constants and validators
+├── widgets/           # Reusable dialogs and UI pieces
+├── firebase_options.dart
+└── main.dart
+```
+
+---
+
+## ⚡ Feature Highlights
+
+### 🔐 Authentication
+
+Firebase-powered sign up, sign in, Google auth support, auth-state routing, and protected access to the main app experience.
+
+### 🏫 Institution-Based Discovery
+
+Passengers search for institutions, explore available transport options, and reach driver detail pages from a focused discovery flow.
+
+### 🗺️ Live Driver Location
+
+Drivers can start and stop live location sharing. The app updates Firestore with coordinates, heading, speed, online status, and timestamps.
+
+### 💬 Realtime Chat
+
+Chat threads are created per passenger-driver pair. Messages are stored under chat subcollections with unread counters for both sides.
+
+### 🚐 Driver Dashboard
+
+Drivers can manage profile visibility, subscribers, ride requests, ratings, and live location from a dedicated driver mode.
+
+---
+
+## 🧪 Getting Started
+
+### Prerequisites
+
+```bash
+Flutter SDK
+Dart SDK
+Firebase project
+Google Maps API key
+Android Studio or VS Code
+```
+
+### Installation
+
+```bash
+git clone https://github.com/diyansyed/vantrek_rides.git
+cd vantrek_rides
+flutter pub get
+```
+
+### Firebase Setup
+
+1. Create a Firebase project.
+2. Enable Firebase Authentication.
+3. Enable Cloud Firestore.
+4. Enable Firebase Realtime Database if using realtime location/chat extensions.
+5. Add Android/iOS/web apps in Firebase.
+6. Generate `firebase_options.dart` with FlutterFire CLI.
+
+```bash
+dart pub global activate flutterfire_cli
+flutterfire configure
+```
+
+### Maps Setup
+
+Add your Google Maps API key to the native platform files and enable:
+
+```text
+Maps SDK for Android
+Maps SDK for iOS
+Places API
+Geocoding API
+```
+
+### Run
+
+```bash
+flutter run
+```
+
+---
+
+## 🔥 Why It Stands Out
+
+<div align="center">
+
+| 🌟 Strength | 💎 Why It Matters |
+| --- | --- |
+| Real product flow | Not just UI screens; it includes auth, data, users, drivers, requests, ratings, chat, and tracking. |
+| Multi-role experience | Passengers and drivers have separate responsibilities and purpose-built screens. |
+| Firebase-backed architecture | Auth, Firestore streams, realtime updates, and structured service classes power the app. |
+| Map-first commute utility | Google Maps, Places, geolocation, and live driver status support practical transport use cases. |
+| Clean Flutter organization | Models, services, providers, repositories, screens, and widgets are separated clearly. |
+
 </div>
 
 ---
 
-<div align="center">
-  <strong>Engineering products that are useful, reliable, and worthy of the people who depend on them.</strong>
-</div>
+## 🗺️ Roadmap
+
+- [ ] Admin approval panel for driver applications
+- [ ] Push notifications for ride requests and chat messages
+- [ ] Route preview and estimated arrival time
+- [ ] Payment or subscription billing flow
+- [ ] Ride history and saved commute routes
+- [ ] Driver verification documents
+- [ ] Production Firestore security rules
+- [ ] CI workflow for automated Flutter checks
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome. A good contribution keeps the app focused on reliable commute discovery, driver trust, realtime communication, and clean Flutter architecture.
+
+```bash
+git checkout -b feature/your-feature
+flutter analyze
+flutter test
+git commit -m "Add your feature"
+```
+
+---
+
+## 📸 Gallery
 
 <div align="center">
-  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=140&section=footer&color=0:8e2de2,50:302b63,100:0f0c29" alt="Footer banner" />
+  <img src="logo.png" width="130" alt="Vantrek logo" />
+  <br />
+  <br />
+  <img src="APP%20SCREENSHOT.jpeg" width="240" alt="App screenshot one" />
+  &nbsp;&nbsp;
+  <img src="App%20screenshot%202.jpeg" width="240" alt="App screenshot two" />
+</div>
+
+---
+
+## 💙 Built For Better Commutes
+
+<div align="center">
+  <h3>Vantrek Rides turns scattered transport discovery into a connected, trackable, and trusted ride experience.</h3>
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=150&section=footer&color=0:023E8A,50:0077B6,100:00B4D8&animation=fadeIn" width="100%" alt="Footer wave" />
 </div>
